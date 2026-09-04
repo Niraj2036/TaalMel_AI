@@ -1,7 +1,10 @@
 # TaalMel AI — Autonomous Financial Reconciliation Engine
 
 **Razorpay Buildathon · Track 4: Financial Reconciliation Engine**  
-**Repository**: [https://github.com/Niraj2036/TaalMel_AI](https://github.com/Niraj2036/TaalMel_AI)
+
+🌐 **Live Deployed Application**: [https://taalmel-ai.vercel.app/](https://taalmel-ai.vercel.app/)  
+🎬 **Demo Video Pitch**: [https://www.youtube.com/watch?v=2rNgj0AKErk](https://www.youtube.com/watch?v=2rNgj0AKErk)  
+💻 **GitHub Repository**: [https://github.com/Niraj2036/TaalMel_AI](https://github.com/Niraj2036/TaalMel_AI)
 
 ---
 
@@ -17,13 +20,12 @@ The system features:
 
 ---
 
-### 📖 Documentation Sitemap
+### 🚀 Quick Links
 
-* 📘 **[Reconciliation Flow & Architecture Specification](reconciliation.md)**  
-  Detailed step-by-step breakdown of two-tier normalization, group-first 4-pass engine, evidence gate scoring, and non-blocking background persistence.
-
-* 📊 **[Empirical Ground Truth Benchmark Report](reports.md)**  
-  Comprehensive performance metrics across all 4 official benchmark datasets (Level 1, Level 2, Level 3 Nightmare, and Mixed Test).
+* 🌐 **[Live Deployed Web Application](https://taalmel-ai.vercel.app/)** — Experience TaalMel AI live on Vercel.
+* 🎬 **[Demo Video Presentation](https://www.youtube.com/watch?v=2rNgj0AKErk)** — Watch the complete walkthrough video on YouTube.
+* 📘 **[Reconciliation Flow & Architecture Specification](reconciliation.md)** — Detailed step-by-step breakdown of two-tier normalization, group-first 4-pass engine, evidence gate scoring, and non-blocking background persistence.
+* 📊 **[Empirical Ground Truth Benchmark Report](reports.md)** — Comprehensive performance metrics across all 4 official benchmark datasets (Level 1, Level 2, Level 3 Nightmare, and Mixed Test).
 
 ---
 

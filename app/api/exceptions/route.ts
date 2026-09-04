@@ -30,14 +30,14 @@ export async function GET(request: Request) {
     // Shape the response to match ExceptionList.tsx expectations
     const formatted = exceptions.map(ex => {
       const jp = ex.journalProposal;
-      
+
       // SLA Aging Evaluation
       const ageHours = ex.createdAt ? Math.floor((Date.now() - new Date(ex.createdAt).getTime()) / (1000 * 60 * 60)) : 0;
       const isSLABreach = ageHours >= 48;
       const slaTag = isSLABreach ? `CRITICAL: ${ageHours}h (SLA Breach)` : `Active: ${ageHours}h`;
       const finalSeverity = isSLABreach && ex.status !== 'RESOLVED' ? 'CRITICAL' : ex.severity;
 
-      // PII Check
+      // PII Check & Hypothesis metadata
       const meta = ex.metadata ? JSON.parse(ex.metadata) : {};
 
       return {
@@ -52,7 +52,8 @@ export async function GET(request: Request) {
         isSLABreach,
         slaTag,
         piiScrubbed:    meta.piiScrubbed ?? true,
-        verifiedHypothesis: meta.verifiedHypothesis || meta.testedHypothesis || null,
+        verifiedHypothesis: meta.hypothesisVerified ? meta.verifiedHypothesis : null,
+        testedHypothesis: meta.testedHypothesis || meta.verifiedHypothesis || null,
         proofReasoning: meta.proofReasoning ?? null,
         hypothesisVerified: meta.hypothesisVerified ?? (jp !== null && ex.status === 'PENDING_APPROVAL'),
         transactionIds: JSON.parse(ex.transactionIds) as string[],

@@ -7,7 +7,7 @@
 
 ## 1. Executive Summary & Architectural Philosophy
 
-The **Autonomous AI Finance Controller & Reconciliation Engine** is designed to achieve 100% ground-truth accuracy across complex multi-source financial datasets (ERP Ledgers, Payment Gateways, and Bank Statements).
+The **Autonomous AI Finance Controller & Reconciliation Engine** (TaalMel AI) is designed to achieve 100% ground-truth accuracy across complex multi-source financial datasets (ERP Ledgers, Payment Gateways, and Bank Statements).
 
 ### Core Design Principles
 
@@ -45,7 +45,7 @@ flowchart TD
 ## 3. Detailed Step-by-Step Execution Flow
 
 ### Step 1: Data Ingestion & Two-Tier Normalization
-* **Location**: [`solution/lib/normalization.ts`](file:///d:/Hackathons/razorpay/solution/lib/normalization.ts) & [`solution/app/api/reconcile/route.ts`](file:///d:/Hackathons/razorpay/solution/app/api/reconcile/route.ts)
+* **Location**: `lib/normalization.ts` & `app/api/reconcile/route.ts`
 
 1. **CSV Parsing**: Raw CSV files (`bank_statement`, `erp_ledger`, `gateway_data`) are parsed using `PapaParse` into key-value JavaScript objects.
 2. **Paise Integer Conversion (`parseToMinorUnits`)**: String amounts like `"1234.56"` are split into whole units and decimals to produce exact BigInt minor units (`123456` paise), preventing floating-point errors.
@@ -60,7 +60,7 @@ flowchart TD
 ---
 
 ### Step 2: Pre-Processing, Anomaly & Decoy Filtration
-* **Location**: [`solution/lib/reconciliation/conflict-detector.ts`](file:///d:/Hackathons/razorpay/solution/lib/reconciliation/conflict-detector.ts)
+* **Location**: `lib/reconciliation/conflict-detector.ts`
 
 1. **Description & Reference Conflict Filtration (`hasDescriptionConflict`)**: Inspects narration texts for semantic rejection keywords:
    - Rejects candidate matches containing keywords such as `WRONG REFERENCE`, `FALSE`, `DECOY`, or customer identity mismatches.
@@ -71,10 +71,10 @@ flowchart TD
 ---
 
 ### Step 3: Group-First 4-Pass Matching Engine
-* **Location**: [`solution/lib/reconciliation/engine.ts`](file:///d:/Hackathons/razorpay/solution/lib/reconciliation/engine.ts)
+* **Location**: `lib/reconciliation/engine.ts`
 
 #### Pass 1: Multi-Item Settlement Group Matching (`runPass2Group`)
-* **Location**: [`solution/lib/reconciliation/pass2-group.ts`](file:///d:/Hackathons/razorpay/solution/lib/reconciliation/pass2-group.ts)
+* **Location**: `lib/reconciliation/pass2-group.ts`
 1. **Direction A1: N Gateway $\rightarrow$ 1 Bank (N:1 Settlement Aggregation)**
    - Groups Gateway records sharing the same `settlementId`.
    - Computes net drop: $\text{Net} = \sum \text{Amount} - \sum \text{Fee} - \sum \text{GST}$.
@@ -87,11 +87,11 @@ flowchart TD
    - Identifies negative refund entries within a settlement batch and nets them against positive payments before matching against bank drops.
 
 #### Pass 2: Direct 1:1 Matching (`runPass1Exact`)
-* **Location**: [`solution/lib/reconciliation/pass1-exact.ts`](file:///d:/Hackathons/razorpay/solution/lib/reconciliation/pass1-exact.ts)
+* **Location**: `lib/reconciliation/pass1-exact.ts`
 - Takes un-batched single Gateway records and performs direct hash-bucket matching against remaining bank credits based on UTR, amount, and date proximity.
 
 #### Pass 3: ERP Invoices $\rightarrow$ Remaining Bank Credits via Subset-Sum
-* **Location**: [`solution/lib/reconciliation/pass3-solver.ts`](file:///d:/Hackathons/razorpay/solution/lib/reconciliation/pass3-solver.ts)
+* **Location**: `lib/reconciliation/pass3-solver.ts`
 - Executes bounded dynamic programming subset-sum solving (`solveSubsetSum`) to match unallocated ERP invoices against lump bank drops.
 
 #### Pass 4: ERP Invoice $\rightarrow$ Matched Gateway Cross-Linking
@@ -100,7 +100,7 @@ flowchart TD
 ---
 
 ### Step 4: Evidence Gate & Confidence Scoring
-* **Location**: [`solution/lib/reconciliation/evidence-gate.ts`](file:///d:/Hackathons/razorpay/solution/lib/reconciliation/evidence-gate.ts)
+* **Location**: `lib/reconciliation/evidence-gate.ts`
 
 Every candidate match must pass through the Evidence Gate to verify financial truth:
 
@@ -117,7 +117,7 @@ Every candidate match must pass through the Evidence Gate to verify financial tr
 ---
 
 ### Step 5: Exception Categorization & Tier-1 Resolver
-* **Location**: [`solution/lib/exceptions/resolver.ts`](file:///d:/Hackathons/razorpay/solution/lib/exceptions/resolver.ts)
+* **Location**: `lib/exceptions/resolver.ts`
 
 1. **Exception Categorization**: Unmatched records are assigned specific exception types:
    - `MISSING_IN_BANK`: Gateway settlement or ERP invoice with no bank deposit.
@@ -132,7 +132,7 @@ Every candidate match must pass through the Evidence Gate to verify financial tr
 ---
 
 ### Step 6: Non-Blocking Response & Async DB Persistence
-* **Location**: [`solution/app/api/reconcile/route.ts`](file:///d:/Hackathons/razorpay/solution/app/api/reconcile/route.ts)
+* **Location**: `app/api/reconcile/route.ts`
 
 1. **Instant Response (<300ms)**: The API route finishes the in-memory reconciliation calculation, computes the 7 metrics, and returns the response immediately to the client.
 2. **Background Persistence**: A non-blocking async worker persists the run data to PostgreSQL (Neon DB) in the background:

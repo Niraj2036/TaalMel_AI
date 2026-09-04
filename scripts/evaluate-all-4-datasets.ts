@@ -6,11 +6,19 @@ import { reconcile } from '../lib/reconciliation/engine';
 
 interface EvaluationResult {
   datasetName: string;
+  totalRecordsProcessed: number;
   totalBankRecords: number;
   expectedMatchedBank: number;
   actualMatchedBank: number;
   expectedUnmatchedBank: number;
   actualUnmatchedBank: number;
+  totalGroups: number;
+  correctlyMatchedGroups: number;
+  incorrectlyMatchedGroups: number;
+  cardinality1to1: number;
+  cardinality1toN: number;
+  cardinalityNto1: number;
+  cardinalityNtoM: number;
   matchRate: number;
   expectedMatchRate: number;
   precision: number;
@@ -117,15 +125,41 @@ function evaluateDataset(
   const precision = actualMatchedBank > 0 ? ((actualMatchedBank - falsePositives) / actualMatchedBank) * 100 : 100;
   const recall = expectedMatchedBank > 0 ? ((actualMatchedBank - falsePositives) / expectedMatchedBank) * 100 : 0;
   const falseAutomationRate = actualMatchedBank > 0 ? (falsePositives / actualMatchedBank) * 100 : 0;
+  // Compute Cardinality Breakdown across matches
+  let count1to1 = 0;
+  let count1toN = 0;
+  let countNto1 = 0;
+  let countNtoM = 0;
+
+  for (const m of result.matches) {
+    const bankCount = m.bankTxnIds.length;
+    const internalCount = m.internalTxnIds.length;
+    if (bankCount === 1 && internalCount === 1) count1to1++;
+    else if (bankCount > 1 && internalCount === 1) count1toN++;
+    else if (bankCount === 1 && internalCount > 1) countNto1++;
+    else countNtoM++;
+  }
+
+  const totalRecordsProcessed = erpTxns.length + gatewayTxns.length + bankTxns.length;
+  const totalGroups = result.matches.length;
+  const correctlyMatchedGroups = result.matches.length - falsePositives;
   const reviewRate = (actualUnmatchedBank / totalBankRecords) * 100;
 
   return {
     datasetName,
+    totalRecordsProcessed,
     totalBankRecords,
     expectedMatchedBank,
     actualMatchedBank,
     expectedUnmatchedBank,
     actualUnmatchedBank,
+    totalGroups,
+    correctlyMatchedGroups,
+    incorrectlyMatchedGroups: falsePositives,
+    cardinality1to1: count1to1,
+    cardinality1toN: count1toN,
+    cardinalityNto1: countNto1,
+    cardinalityNtoM: countNtoM,
     matchRate: Number(matchRate.toFixed(2)),
     expectedMatchRate: Number(expectedMatchRate.toFixed(2)),
     precision: Number(precision.toFixed(2)),
@@ -143,7 +177,7 @@ function runAllEvaluations() {
   console.log('       RUNNING GROUND TRUTH EVALUATION ACROSS ALL 4 DATASETS     ');
   console.log('================================================================\n');
 
-  const results: EvaluationResult[] = [];
+  const results = [];
 
   results.push(evaluateDataset('Dataset Level 1 (Basic)', 'dataset_level_1', 'dataset_level_1.csv'));
   results.push(evaluateDataset('Dataset Level 2 (Advanced)', 'dataset_level_2', 'dataset_level_2.csv'));
@@ -152,16 +186,19 @@ function runAllEvaluations() {
 
   console.table(results.map(r => ({
     Dataset: r.datasetName,
+    'Total Recs': r.totalRecordsProcessed,
     'Bank Txns': r.totalBankRecords,
     'Exp Matched': r.expectedMatchedBank,
     'Act Matched': r.actualMatchedBank,
-    'Exp Match %': `${r.expectedMatchRate}%`,
-    'Act Match %': `${r.matchRate}%`,
+    '1:1 Groups': r.cardinality1to1,
+    '1:N Groups': r.cardinality1toN,
+    'N:1 Groups': r.cardinalityNto1,
+    'N:M Groups': r.cardinalityNtoM,
+    'Match Rate': `${r.matchRate}%`,
     Precision: `${r.precision}%`,
     Recall: `${r.recall}%`,
     'False Auto %': `${r.falseAutomationRate}%`,
-    'Review Rate': `${r.reviewRate}%`,
-    'Exceptions': r.totalExceptions,
+    Exceptions: r.totalExceptions,
   })));
 
   fs.writeFileSync(

@@ -1,44 +1,34 @@
 import { NextResponse } from 'next/server';
-import { chatCompletion } from '@/lib/agent/openrouter';
 import prisma from '@/lib/db';
+import { chatCompletion } from '@/lib/agent/openrouter';
 import { formatFromMinorUnits } from '@/lib/currency';
-
-const SYSTEM_PROMPT = `You are a Finance AI Copilot for ICFR compliance. Strict rules:
-1. Always call tools before stating numbers. Never guess.
-2. Format currency as ₹X,XXX.XX.
-3. Keep answers concise.`;
 
 const TOOLS = [
   {
     name: 'get_match_rate',
-    description: 'Fetches reconciliation run summary (match rate, counts) from DB by runId',
+    description: 'Fetches reconciliation run summary (match rate, total records, matched count, exception count, precision, recall) from DB for the active run.',
     parameters: {
       type: 'object',
-      properties: {
-        runId: { type: 'string' }
-      },
-      required: ['runId']
+      properties: {},
     }
   },
   {
     name: 'get_exceptions',
-    description: 'Fetches exceptions from DB for a runId, with optional type filter',
+    description: 'Fetches exceptions from DB for the active run, with optional type filter',
     parameters: {
       type: 'object',
       properties: {
-        runId: { type: 'string' },
-        type: { type: 'string', description: 'Exception type e.g. FEE_MISMATCH' }
-      },
-      required: ['runId']
+        type: { type: 'string', description: 'Optional exception type filter e.g. FEE_MISMATCH, TDS_ANOMALY, AMOUNT_MISMATCH, MISSING_IN_BANK' }
+      }
     }
   },
   {
     name: 'get_transaction',
-    description: 'Fetches a specific transaction by its original txnId',
+    description: 'Fetches a specific transaction by its original txnId from DB',
     parameters: {
       type: 'object',
       properties: {
-        txnId: { type: 'string' }
+        txnId: { type: 'string', description: 'Original transaction ID or reference ID' }
       },
       required: ['txnId']
     }
@@ -47,7 +37,26 @@ const TOOLS = [
 
 export async function POST(request: Request) {
   try {
-    const { query, runId } = await request.json();
+    const { query, runId: reqRunId } = await request.json();
+
+    // ── Implicit Run ID Resolution ──────────────────────────────────────────
+    let activeRunId = reqRunId;
+    if (!activeRunId) {
+      const latestRun = await prisma.reconciliationRun.findFirst({
+        orderBy: { createdAt: 'desc' },
+        select: { id: true },
+      });
+      activeRunId = latestRun?.id || '';
+    }
+
+    const SYSTEM_PROMPT = `You are an executive Finance AI Copilot for ICFR compliance.
+You are currently analyzing active reconciliation run ID: "${activeRunId}".
+
+STRICT INSTRUCTIONS:
+1. NEVER ask the user to provide a run ID. You are ALREADY linked to active run ID "${activeRunId}".
+2. When answering any question about match rate, metrics, exceptions, or transactions, ALWAYS call the appropriate tool (get_match_rate or get_exceptions) IMMEDIATELY before answering. Never guess numbers.
+3. Format all currency values in Indian Rupees (e.g. ₹30,000.00).
+4. Keep answers concise, clear, executive, direct, and well-structured.`;
 
     const messages: any[] = [
       { role: 'system', content: SYSTEM_PROMPT },
@@ -60,20 +69,31 @@ export async function POST(request: Request) {
     // Tool loop
     while (currentMessage.tool_calls) {
       messages.push(currentMessage);
-      
+
       for (const toolCall of currentMessage.tool_calls) {
         const { name, arguments: argsString } = toolCall.function;
-        const args = JSON.parse(argsString);
+        const args = JSON.parse(argsString || '{}');
         let result = '';
 
         if (name === 'get_match_rate') {
           const run = await prisma.reconciliationRun.findUnique({
-            where: { id: args.runId || runId },
-            select: { matchRate: true, totalRecords: true, matchedRecords: true, exceptionCount: true }
+            where: { id: activeRunId },
+            select: {
+              id: true,
+              matchRate: true,
+              totalRecords: true,
+              matchedRecords: true,
+              exceptionCount: true,
+              precision: true,
+              recall: true,
+              throughputRps: true,
+              reviewRate: true,
+              falseAutoRate: true,
+            }
           });
-          result = JSON.stringify(run || { error: 'Run not found' });
+          result = JSON.stringify(run || { error: 'No active reconciliation run found.' });
         } else if (name === 'get_exceptions') {
-          const where: any = { runId: args.runId || runId };
+          const where: any = { runId: activeRunId };
           if (args.type) where.exceptionType = args.type;
           const ex = await prisma.exception.findMany({ where, take: 10 });
           result = JSON.stringify(ex);
@@ -82,13 +102,13 @@ export async function POST(request: Request) {
             where: { txnId: args.txnId }
           });
           if (txn) {
-              const formattedTxn = {
-                  ...txn,
-                  amountFormatted: formatFromMinorUnits(txn.amount)
-              }
-              result = JSON.stringify(formattedTxn);
+            const formattedTxn = {
+              ...txn,
+              amountFormatted: formatFromMinorUnits(txn.amount)
+            };
+            result = JSON.stringify(formattedTxn);
           } else {
-              result = JSON.stringify({ error: 'Transaction not found' });
+            result = JSON.stringify({ error: 'Transaction not found' });
           }
         }
 

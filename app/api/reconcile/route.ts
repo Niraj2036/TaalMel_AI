@@ -9,12 +9,10 @@ import {
 import { reconcile } from '@/lib/reconciliation/engine';
 import { resolveException } from '@/lib/exceptions/resolver';
 import { generateHash } from '@/lib/audit';
-import type { MatchResult, ExceptionData } from '@/lib/types';
 
 export const maxDuration = 60;
 
 // ── Helper: two-tier normalization for a whole CSV ────────────────────────────
-// Tier 1: heuristic (fast). If first row has low confidence → Tier 2: LLM (once per file).
 async function normalizeRows(
   rows: any[],
   sourceType: 'BANK' | 'ERP' | 'GATEWAY',
@@ -22,34 +20,27 @@ async function normalizeRows(
 ) {
   if (rows.length === 0) return [];
 
-  // Check confidence on the first row
   const needsLLM = !hasGoodHeuristicConfidence(rows[0]);
 
   if (!needsLLM) {
-    // Tier 1: all rows use fast heuristic normalizer
     console.log(`[Schema:${sourceType}] Heuristic detection succeeded.`);
     return rows.map(r => heuristicFn(r));
   }
 
-  // Tier 2: call LLM once with headers + first 2 rows
   console.log(`[Schema:${sourceType}] Heuristic confidence low — calling LLM for schema inference.`);
   const headers = Object.keys(rows[0]);
   const schema  = await inferSchemaFromLLM(headers, rows.slice(0, 2));
 
   if (!schema.date && !schema.amount && !schema.credit) {
-    // LLM also failed — fall back to heuristic anyway
     console.warn(`[Schema:${sourceType}] LLM schema inference returned empty, using heuristic.`);
     return rows.map(r => heuristicFn(r));
   }
 
-  // Apply LLM schema to ALL rows
   console.log(`[Schema:${sourceType}] LLM schema applied to all ${rows.length} rows.`);
   return rows.map(r => normalizeWithSchema(r, schema, sourceType));
 }
 
 export async function POST(request: Request) {
-  const startTime = Date.now();
-
   try {
     const formData = await request.formData();
 
@@ -81,14 +72,32 @@ export async function POST(request: Request) {
     const rawERP     = Papa.parse(erpText,     { header: true, skipEmptyLines: true }).data as any[];
     const rawGateway = Papa.parse(gatewayText, { header: true, skipEmptyLines: true }).data as any[];
 
-    // ── Two-tier normalization (heuristic → LLM fallback, one call per file) ──
-    const [bankTxns, erpTxns, gatewayTxns] = await Promise.all([
+    // ── Two-tier normalization ───────────────────────────────────────────────
+    const [rawBankTxns, rawErpTxns, rawGatewayTxns] = await Promise.all([
       normalizeRows(rawBank,    'BANK',    normalizeBank),
       normalizeRows(rawERP,     'ERP',     normalizeERP),
       normalizeRows(rawGateway, 'GATEWAY', normalizeGateway),
     ]);
 
-    const totalRecords = bankTxns.length + erpTxns.length + gatewayTxns.length;
+    const totalRecords = rawBankTxns.length + rawErpTxns.length + rawGatewayTxns.length;
+
+    // Pre-assign DB UUIDs to canonical transactions for fast batch insertion
+    const canonicalToDbId = new Map<string, string>();
+    const bankTxns = rawBankTxns.map(t => {
+      const dbId = crypto.randomUUID();
+      canonicalToDbId.set(t.id, dbId);
+      return { ...t, dbId };
+    });
+    const erpTxns = rawErpTxns.map(t => {
+      const dbId = crypto.randomUUID();
+      canonicalToDbId.set(t.id, dbId);
+      return { ...t, dbId };
+    });
+    const gatewayTxns = rawGatewayTxns.map(t => {
+      const dbId = crypto.randomUUID();
+      canonicalToDbId.set(t.id, dbId);
+      return { ...t, dbId };
+    });
 
     // ── Run reconciliation engine ──────────────────────────────────────────────
     const algoStartTime = Date.now();
@@ -102,7 +111,6 @@ export async function POST(request: Request) {
     const matchedCount    = matchedBankTxnIds.size;
     const exceptionCount  = result.exceptions.length;
     const totalBank       = result.metrics.totalBankProcessed;
-    const totalInternal   = result.metrics.totalInternalProcessed;
     const matchRate       = totalBank > 0 ? (matchedCount / totalBank) * 100 : 0;
 
     const precision = matchRate;
@@ -112,162 +120,182 @@ export async function POST(request: Request) {
     const reviewRate = totalBank > 0 ? (unmatchedBankCount / totalBank) * 100 : 0;
     const throughputRps = algoTimeMs > 0 ? Math.round((totalRecords / algoTimeMs) * 1000) : totalRecords;
 
-    // ── Background DB Persistence (Non-Blocking for ultra-high throughput) ───
+    // ── Synchronously finalize run summary in DB ──────────────────────────────
+    await prisma.reconciliationRun.update({
+      where: { id: run.id },
+      data: {
+        status:            'COMPLETED',
+        totalRecords,
+        matchedRecords:    matchedCount,
+        exceptionCount,
+        matchRate,
+        precision,
+        recall,
+        falseAutoRate,
+        reviewRate,
+        throughputRps,
+        processingTimeMs,
+        exceptionIntegrity: 100,
+      },
+    });
+
+    // ── Fast Non-Blocking Batch DB Persistence ────────────────────────────────
     (async () => {
       try {
-        await prisma.transaction.createMany({
-          data: [
-            ...bankTxns.map(t => ({
-              runId:        run.id,
-              source:       'BANK' as const,
-              txnId:        t.sourceTxnId,
-              referenceId:  t.referenceId ?? null,
-              utr:          t.utr ?? null,
-              settlementId: t.settlementId ?? null,
-              amount:       t.amount,
-              currency:     t.currency,
-              txnDate:      new Date(t.date),
-              feeAmount:    t.fee,
-              taxAmount:    t.tax,
-              txnType:      t.type,
-              narration:    t.description,
-              rawData:      JSON.stringify(t.metadata),
-            })),
-            ...erpTxns.map(t => ({
-              runId:        run.id,
-              source:       'ERP' as const,
-              txnId:        t.sourceTxnId,
-              referenceId:  t.referenceId ?? null,
-              utr:          t.utr ?? null,
-              settlementId: t.settlementId ?? null,
-              amount:       t.amount,
-              currency:     t.currency,
-              txnDate:      new Date(t.date),
-              feeAmount:    t.fee,
-              taxAmount:    t.tax,
-              txnType:      t.type,
-              narration:    t.description,
-              rawData:      JSON.stringify(t.metadata),
-            })),
-            ...gatewayTxns.map(t => ({
-              runId:        run.id,
-              source:       'GATEWAY' as const,
-              txnId:        t.sourceTxnId,
-              referenceId:  t.referenceId ?? null,
-              utr:          t.utr ?? null,
-              settlementId: t.settlementId ?? null,
-              amount:       t.amount,
-              currency:     t.currency,
-              txnDate:      new Date(t.date),
-              feeAmount:    t.fee,
-              taxAmount:    t.tax,
-              txnType:      t.type,
-              narration:    t.description,
-              rawData:      JSON.stringify(t.metadata),
-            })),
-          ],
-          skipDuplicates: true,
-        });
+        // 1. Bulk insert transactions
+        const allTxnsToInsert = [
+          ...bankTxns.map(t => ({
+            id:           t.dbId,
+            runId:        run.id,
+            source:       'BANK' as const,
+            txnId:        t.sourceTxnId,
+            referenceId:  t.referenceId ?? null,
+            utr:          t.utr ?? null,
+            settlementId: t.settlementId ?? null,
+            amount:       t.amount,
+            currency:     t.currency,
+            txnDate:      new Date(t.date),
+            feeAmount:    t.fee,
+            taxAmount:    t.tax,
+            txnType:      t.type,
+            narration:    t.description,
+            rawData:      JSON.stringify(t.metadata),
+          })),
+          ...erpTxns.map(t => ({
+            id:           t.dbId,
+            runId:        run.id,
+            source:       'ERP' as const,
+            txnId:        t.sourceTxnId,
+            referenceId:  t.referenceId ?? null,
+            utr:          t.utr ?? null,
+            settlementId: t.settlementId ?? null,
+            amount:       t.amount,
+            currency:     t.currency,
+            txnDate:      new Date(t.date),
+            feeAmount:    t.fee,
+            taxAmount:    t.tax,
+            txnType:      t.type,
+            narration:    t.description,
+            rawData:      JSON.stringify(t.metadata),
+          })),
+          ...gatewayTxns.map(t => ({
+            id:           t.dbId,
+            runId:        run.id,
+            source:       'GATEWAY' as const,
+            txnId:        t.sourceTxnId,
+            referenceId:  t.referenceId ?? null,
+            utr:          t.utr ?? null,
+            settlementId: t.settlementId ?? null,
+            amount:       t.amount,
+            currency:     t.currency,
+            txnDate:      new Date(t.date),
+            feeAmount:    t.fee,
+            taxAmount:    t.tax,
+            txnType:      t.type,
+            narration:    t.description,
+            rawData:      JSON.stringify(t.metadata),
+          })),
+        ];
 
-        const dbTxns = await prisma.transaction.findMany({
-          where: { runId: run.id },
-          select: { id: true, txnId: true, source: true },
-        });
+        await prisma.transaction.createMany({ data: allTxnsToInsert, skipDuplicates: true });
 
-        const txnIdMap = new Map<string, string>();
-        for (const t of dbTxns) txnIdMap.set(`${t.source}:${t.txnId}`, t.id);
+        // 2. Bulk insert matches and matchTransaction links
+        const matchesToInsert: any[] = [];
+        const matchTxLinksToInsert: any[] = [];
 
-        const canonicalToDbId = new Map<string, string>();
-        const allCanonical = [...bankTxns, ...erpTxns, ...gatewayTxns];
-        for (const ct of allCanonical) {
-          const dbId = txnIdMap.get(`${ct.sourceType}:${ct.sourceTxnId}`);
-          if (dbId) canonicalToDbId.set(ct.id, dbId);
+        for (const match of result.matches) {
+          const matchDbId = crypto.randomUUID();
+          matchesToInsert.push({
+            id:              matchDbId,
+            runId:           run.id,
+            matchType:       match.matchType,
+            matchPass:       match.matchType === '1:1' ? 'PASS_1_EXACT'
+                           : match.matchType === 'N:M' ? 'PASS_3_SOLVER'
+                           : 'PASS_2_GROUP',
+            evidenceScore:   match.confidenceScore,
+            evidenceDetails: JSON.stringify(match.evidence),
+            isProven:        match.confidenceScore >= 70,
+          });
+
+          for (const canonicalId of match.internalTxnIds) {
+            const dbId = canonicalToDbId.get(canonicalId);
+            if (dbId) matchTxLinksToInsert.push({ matchId: matchDbId, transactionId: dbId });
+          }
+          for (const canonicalId of match.bankTxnIds) {
+            const dbId = canonicalToDbId.get(canonicalId);
+            if (dbId) matchTxLinksToInsert.push({ matchId: matchDbId, transactionId: dbId });
+          }
         }
 
-        const CHUNK_SIZE = 50;
-        for (let i = 0; i < result.matches.length; i += CHUNK_SIZE) {
-          const chunk = result.matches.slice(i, i + CHUNK_SIZE);
-          await Promise.all(chunk.map(async (match) => {
-            const dbMatch = await prisma.match.create({
-              data: {
-                runId:          run.id,
-                matchType:      match.matchType,
-                matchPass:      match.matchType === '1:1' ? 'PASS_1_EXACT'
-                              : match.matchType === 'N:M' ? 'PASS_3_SOLVER'
-                              : 'PASS_2_GROUP',
-                evidenceScore:  match.confidenceScore,
-                evidenceDetails: JSON.stringify(match.evidence),
-                isProven:        match.confidenceScore >= 70,
-              },
-            });
-
-            const matchTxLinks: { matchId: string; transactionId: string }[] = [];
-            for (const canonicalId of match.internalTxnIds) {
-              const dbId = canonicalToDbId.get(canonicalId);
-              if (dbId) matchTxLinks.push({ matchId: dbMatch.id, transactionId: dbId });
-            }
-            for (const canonicalId of match.bankTxnIds) {
-              const dbId = canonicalToDbId.get(canonicalId);
-              if (dbId) matchTxLinks.push({ matchId: dbMatch.id, transactionId: dbId });
-            }
-
-            if (matchTxLinks.length > 0) {
-              await prisma.matchTransaction.createMany({ data: matchTxLinks, skipDuplicates: true });
-            }
-          }));
+        if (matchesToInsert.length > 0) {
+          await prisma.match.createMany({ data: matchesToInsert, skipDuplicates: true });
         }
+        if (matchTxLinksToInsert.length > 0) {
+          await prisma.matchTransaction.createMany({ data: matchTxLinksToInsert, skipDuplicates: true });
+        }
+
+        // 3. Bulk insert exceptions and journal proposals
+        const exceptionsToInsert: any[] = [];
+        const proposalsToInsert: any[] = [];
+        const linesToInsert: any[] = [];
 
         const defaultPolicies = [
           { id: 'fee-policy', name: 'Standard Razorpay Fee 2%', feePercentage: 0.02 },
           { id: 'tds-policy', name: 'Standard TDS 10%', tdsRate: 0.10 },
         ];
 
-        for (let i = 0; i < result.exceptions.length; i += CHUNK_SIZE) {
-          const chunk = result.exceptions.slice(i, i + CHUNK_SIZE);
-          await Promise.all(chunk.map(async (exc) => {
-            const dbExc = await prisma.exception.create({
-              data: {
-                runId:          run.id,
-                exceptionType:  exc.type,
-                severity:       exc.severity,
-                transactionIds: JSON.stringify(exc.relatedTxnIds),
-                expectedAmount: exc.amountDifference ? Math.abs(exc.amountDifference) : null,
-                actualAmount:   null,
-                difference:     exc.amountDifference ?? null,
-                description:    exc.description,
-                metadata:       exc.metadata ? JSON.stringify(exc.metadata) : null,
-                status:         'OPEN',
-              },
+        for (const exc of result.exceptions) {
+          const excDbId = crypto.randomUUID();
+          const proposal = resolveException(exc, defaultPolicies);
+          const hasProposal = !!proposal;
+
+          exceptionsToInsert.push({
+            id:             excDbId,
+            runId:          run.id,
+            exceptionType:  exc.type,
+            severity:       exc.severity,
+            transactionIds: JSON.stringify(exc.relatedTxnIds),
+            expectedAmount: exc.amountDifference ? Math.abs(exc.amountDifference) : null,
+            actualAmount:   null,
+            difference:     exc.amountDifference ?? null,
+            description:    exc.description,
+            metadata:       exc.metadata ? JSON.stringify(exc.metadata) : null,
+            status:         hasProposal ? 'PENDING_APPROVAL' : 'OPEN',
+          });
+
+          if (proposal) {
+            const propDbId = crypto.randomUUID();
+            proposalsToInsert.push({
+              id:          propDbId,
+              exceptionId: excDbId,
+              proposedBy:  'TIER_1_RULES',
+              status:      'PENDING',
             });
 
-            const proposal = resolveException(exc, defaultPolicies);
-            if (proposal) {
-              const jp = await prisma.journalProposal.create({
-                data: {
-                  exceptionId: dbExc.id,
-                  proposedBy: 'TIER_1_RULES',
-                  status: 'PENDING',
-                },
-              });
-
-              await prisma.journalLine.createMany({
-                data: proposal.lines.map(line => ({
-                  proposalId:  jp.id,
-                  accountCode: line.accountId,
-                  accountName: line.accountId.replace(/_/g, ' '),
-                  direction:   line.type,
-                  amount:      line.amount,
-                })),
-              });
-
-              await prisma.exception.update({
-                where: { id: dbExc.id },
-                data: { status: 'PENDING_APPROVAL' },
+            for (const line of proposal.lines) {
+              linesToInsert.push({
+                id:          crypto.randomUUID(),
+                proposalId:  propDbId,
+                accountCode: line.accountId,
+                accountName: line.accountId.replace(/_/g, ' '),
+                direction:   line.type,
+                amount:      line.amount,
               });
             }
-          }));
+          }
         }
 
+        if (exceptionsToInsert.length > 0) {
+          await prisma.exception.createMany({ data: exceptionsToInsert, skipDuplicates: true });
+        }
+        if (proposalsToInsert.length > 0) {
+          await prisma.journalProposal.createMany({ data: proposalsToInsert, skipDuplicates: true });
+        }
+        if (linesToInsert.length > 0) {
+          await prisma.journalLine.createMany({ data: linesToInsert, skipDuplicates: true });
+        }
+
+        // 4. Insert audit entry
         const auditDetails = { totalRecords, matchedCount, exceptionCount, matchRate, processingTimeMs, algoTimeMs };
         await prisma.auditEntry.create({
           data: {
@@ -280,27 +308,8 @@ export async function POST(request: Request) {
             hash:       generateHash(auditDetails),
           },
         });
-
-        await prisma.reconciliationRun.update({
-          where: { id: run.id },
-          data: {
-            status:            'COMPLETED',
-            totalRecords,
-            matchedRecords:    matchedCount,
-            exceptionCount,
-            matchRate,
-            precision,
-            recall,
-            falseAutoRate,
-            reviewRate,
-            throughputRps,
-            processingTimeMs,
-            exceptionIntegrity: 100,
-          },
-        });
-
       } catch (err) {
-        console.error('Background DB persistence error:', err);
+        console.error('Batch DB Persistence error:', err);
       }
     })();
 

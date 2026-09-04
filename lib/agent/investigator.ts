@@ -65,13 +65,13 @@ export async function investigateException(exceptionId: string): Promise<AgentIn
     assumedTdsPct: hypothesisTdsPct,
   });
 
-  // 4. If proven or constructed, generate double-entry Tier-2 Journal Proposal
+  // 4. Safety Guardrail: ONLY generate proposed journal entry IF hypothesis is mathematically verified
   let journalCreated = false;
   let jpId: string | undefined;
   let debits: { account: string; amount: number }[] = [];
   let credits: { account: string; amount: number }[] = [];
 
-  if (diffPaise > 0) {
+  if (proof.isVerified && diffPaise > 0) {
     const isTds = hypothesisTdsPct > 0;
     const debitAccount = isTds ? 'TDS_RECEIVABLE_194C' : 'GATEWAY_FEE_EXPENSE';
     const creditAccount = isTds ? 'ACCOUNTS_RECEIVABLE' : 'BANK_CLEARING_ACCOUNT';
@@ -106,18 +106,19 @@ export async function investigateException(exceptionId: string): Promise<AgentIn
           anonymizedFields: piiResult.anonymizedFields,
           verifiedHypothesis: hypothesisName,
           proofReasoning: proof.reasoning,
+          hypothesisVerified: true,
         }),
       },
     });
 
     // Write audit log
-    const auditDetails = { exceptionId: exc.id, hypothesis: hypothesisName, verified: proof.isVerified };
+    const auditDetails = { exceptionId: exc.id, hypothesis: hypothesisName, verified: true };
     await prisma.auditEntry.create({
       data: {
         runId: exc.runId,
         entityId: exc.id,
         entityType: 'EXCEPTION',
-        action: 'AGENT_INVESTIGATED',
+        action: 'AGENT_INVESTIGATION_PROVEN',
         actor: 'TIER_2_AGENTIC_LOOP',
         details: JSON.stringify(auditDetails),
         hash: generateHash(auditDetails),
@@ -126,6 +127,37 @@ export async function investigateException(exceptionId: string): Promise<AgentIn
 
     journalCreated = true;
     jpId = proposal.id;
+  } else {
+    // ⚠️ Safety Enforcement: Hypothesis failed or evidence is insufficient.
+    // DO NOT generate any journal entry. Keep status as OPEN / UNRESOLVED.
+    await prisma.exception.update({
+      where: { id: exc.id },
+      data: {
+        status: 'OPEN',
+        metadata: JSON.stringify({
+          ...(exc.metadata ? JSON.parse(exc.metadata) : {}),
+          piiScrubbed: piiResult.hasPII,
+          anonymizedFields: piiResult.anonymizedFields,
+          testedHypothesis: hypothesisName,
+          proofReasoning: proof.reasoning,
+          hypothesisVerified: false,
+        }),
+      },
+    });
+
+    // Write audit log recording honest failed investigation
+    const auditDetails = { exceptionId: exc.id, hypothesis: hypothesisName, verified: false, reasoning: proof.reasoning };
+    await prisma.auditEntry.create({
+      data: {
+        runId: exc.runId,
+        entityId: exc.id,
+        entityType: 'EXCEPTION',
+        action: 'AGENT_INVESTIGATION_UNPROVEN',
+        actor: 'TIER_2_AGENTIC_LOOP',
+        details: JSON.stringify(auditDetails),
+        hash: generateHash(auditDetails),
+      },
+    });
   }
 
   return {

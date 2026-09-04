@@ -254,7 +254,7 @@ export function MatchList({ runId }: MatchListProps) {
                               <div className="font-semibold text-slate-900 tabular-nums">
                                 {m.bankTransactions[0].formattedAmount}
                               </div>
-                              <div className="text-[11px] font-mono text-slate-500 truncate max-w-[130px]">
+                              <div className="text-[11px] font-mono text-slate-600 truncate max-w-[140px]" title={m.bankTransactions[0].utr || m.bankTransactions[0].txnId}>
                                 {m.bankTransactions[0].utr || m.bankTransactions[0].txnId}
                               </div>
                               {m.bankTransactions.length > 1 && (
@@ -264,7 +264,9 @@ export function MatchList({ runId }: MatchListProps) {
                               )}
                             </div>
                           ) : (
-                            <span className="text-slate-400 italic text-[11px]">Implicitly Covered</span>
+                            <span className="text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 text-[10px] font-medium">
+                              Un-deposited Gateway/ERP
+                            </span>
                           )}
                         </td>
 

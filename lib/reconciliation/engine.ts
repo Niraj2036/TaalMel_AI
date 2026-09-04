@@ -99,6 +99,14 @@ export function reconcile(
   currentBank = currentBank.filter(b => !matchedBankIds.has(b.id));
 
   // ── Pass 4: Link ERP records covered by Gateway→Bank matches ─────────────
+  // Build lookup map from Gateway ID -> existing match object
+  const gwToMatchMap = new Map<string, MatchResult>();
+  for (const m of matches) {
+    for (const id of m.internalTxnIds) {
+      gwToMatchMap.set(id, m);
+    }
+  }
+
   const matchedGwByAmount = new Map<number, CanonicalTransaction[]>();
   for (const gw of gatewayTxns) {
     if (!matchedGatewayIds.has(gw.id)) continue;
@@ -127,18 +135,33 @@ export function reconcile(
     for (const gw of candidates) {
       if (withinDateLag(erp.date, gw.date, MAX_DATE_LAG)) {
         matchedErpIds.add(erp.id);
-        matches.push({
-          matchId: crypto.randomUUID(),
-          internalTxnIds: [erp.id],
-          bankTxnIds: [],
-          matchType: '1:1',
-          confidenceScore: 85,
-          evidence: [
-            `ERP reconciled via Gateway: ${gw.sourceTxnId}`,
-            `Amount match: ₹${(erp.amount / 100).toFixed(2)}`,
-            `Date proximity OK`,
-          ],
-        });
+
+        const existingMatch = gwToMatchMap.get(gw.id);
+        if (existingMatch) {
+          // Merge ERP transaction into existing Bank <-> Gateway match for full 3-way evidence
+          if (!existingMatch.internalTxnIds.includes(erp.id)) {
+            existingMatch.internalTxnIds.push(erp.id);
+          }
+          existingMatch.evidence.push(
+            `ERP record: ${erp.sourceTxnId} (₹${(erp.amount / 100).toFixed(2)})`
+          );
+        } else {
+          // Gateway was not matched to Bank (un-deposited)
+          matches.push({
+            matchId: crypto.randomUUID(),
+            internalTxnIds: [gw.id, erp.id],
+            bankTxnIds: [],
+            matchType: '1:1',
+            confidenceScore: 85,
+            evidence: [
+              `ERP reconciled via Gateway: ${gw.sourceTxnId}`,
+              `ERP record: ${erp.sourceTxnId}`,
+              `Amount match: ₹${(erp.amount / 100).toFixed(2)}`,
+              `Date proximity OK`,
+            ],
+          });
+        }
+
         const pool = matchedGwByAmount.get(erp.amount) || [];
         const idx = pool.indexOf(gw);
         if (idx > -1) pool.splice(idx, 1);

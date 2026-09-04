@@ -21,6 +21,7 @@ interface ExceptionRow {
   piiScrubbed?: boolean;
   verifiedHypothesis?: string | null;
   proofReasoning?: string | null;
+  hypothesisVerified?: boolean;
   journalProposal?: JournalProposal;
 }
 
@@ -235,11 +236,13 @@ export function ExceptionList({ runId }: ExceptionListProps) {
                                 </p>
                               </div>
 
-                              {exc.verifiedHypothesis && (
-                                <div className="p-3 bg-blue-50 border border-blue-200 rounded text-xs">
-                                  <p className="font-semibold text-blue-900 mb-1">⚡ Tier-2 Agentic Verified Fact</p>
-                                  <p className="text-blue-800">{exc.verifiedHypothesis}</p>
-                                  {exc.proofReasoning && <p className="text-blue-700 font-mono text-[11px] mt-1">{exc.proofReasoning}</p>}
+                              {exc.proofReasoning && (
+                                <div className={`p-3 rounded text-xs border ${exc.hypothesisVerified ? 'bg-blue-50 border-blue-200 text-blue-900' : 'bg-amber-50 border-amber-300 text-amber-900'}`}>
+                                  <p className="font-semibold mb-1 flex items-center gap-1.5">
+                                    {exc.hypothesisVerified ? '⚡ Tier-2 Agentic Verified Fact' : '⚠️ Tier-2 Investigation Result: Insufficient Evidence'}
+                                  </p>
+                                  {exc.verifiedHypothesis && <p className="font-medium">{exc.verifiedHypothesis}</p>}
+                                  <p className="font-mono text-[11px] mt-1 opacity-90">{exc.proofReasoning}</p>
                                 </div>
                               )}
 
@@ -266,7 +269,7 @@ export function ExceptionList({ runId }: ExceptionListProps) {
                               )}
                             </div>
 
-                            {/* Journal proposal card (Maker-Checker) */}
+                            {/* Journal proposal card (Maker-Checker Safety Enforced) */}
                             {exc.journalProposal ? (
                               <div className="bg-white border rounded-md p-4 flex flex-col justify-between" style={{ borderColor: 'var(--border)' }}>
                                 <div>
@@ -311,9 +314,11 @@ export function ExceptionList({ runId }: ExceptionListProps) {
                                 )}
                               </div>
                             ) : (
-                              <div className="flex flex-col items-center justify-center p-6 rounded-md border border-dashed text-xs text-slate-400 bg-white">
-                                <p className="font-medium text-slate-500 mb-1">No Journal Entry Proposed</p>
-                                <p className="text-center text-[11px]">Click "Run Tier-2 AI Auto-Investigation" to analyze narrations and test mathematical hypotheses.</p>
+                              <div className="flex flex-col items-center justify-center p-6 rounded-md border border-dashed text-xs text-amber-800 bg-amber-50/50 border-amber-200">
+                                <p className="font-semibold text-amber-900 mb-1">No Journal Entry Proposed — Insufficient Evidence</p>
+                                <p className="text-center text-[11px] max-w-xs leading-relaxed">
+                                  Safety Policy Enforced: Failed AI hypotheses are never converted into accounting adjustments without mathematical proof.
+                                </p>
                               </div>
                             )}
                           </div>

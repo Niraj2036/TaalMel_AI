@@ -52,8 +52,9 @@ export async function GET(request: Request) {
         isSLABreach,
         slaTag,
         piiScrubbed:    meta.piiScrubbed ?? true,
-        verifiedHypothesis: meta.verifiedHypothesis ?? null,
+        verifiedHypothesis: meta.verifiedHypothesis || meta.testedHypothesis || null,
         proofReasoning: meta.proofReasoning ?? null,
+        hypothesisVerified: meta.hypothesisVerified ?? (jp !== null && ex.status === 'PENDING_APPROVAL'),
         transactionIds: JSON.parse(ex.transactionIds) as string[],
         journalProposal: jp
           ? {

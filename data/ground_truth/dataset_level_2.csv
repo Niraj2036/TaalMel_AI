@@ -1,0 +1,206 @@
+case_id,expected_status,pattern,bank_transaction_ids,erp_invoice_ids,gateway_transaction_ids,expected_bank_total,expected_erp_gross_total,expected_gateway_net_total,notes
+C001,MATCHED,1:1_EXACT,B0001,E0001,G0001,5024.0,5024.0,5024.0,Exact amount with realistic posting-date drift.
+C002,MATCHED,1:1_EXACT,B0002,E0002,G0002,7599.0,7599.0,7599.0,Exact amount with realistic posting-date drift.
+C003,MATCHED,1:1_EXACT,B0003,E0003,G0003,20046.0,20046.0,20046.0,Exact amount with realistic posting-date drift.
+C004,MATCHED,1:1_EXACT,B0004,E0004,G0004,7568.0,7568.0,7568.0,Exact amount with realistic posting-date drift.
+C005,MATCHED,1:1_EXACT,B0005,E0005,G0005,10038.0,10038.0,10038.0,Exact amount with realistic posting-date drift.
+C006,MATCHED,1:1_EXACT,B0006,E0006,G0006,12034.0,12034.0,12034.0,Exact amount with realistic posting-date drift.
+C007,MATCHED,1:1_EXACT,B0007,E0007,G0007,10073.0,10073.0,10073.0,Exact amount with realistic posting-date drift.
+C008,MATCHED,1:1_EXACT,B0008,E0008,G0008,12071.0,12071.0,12071.0,Exact amount with realistic posting-date drift.
+C009,MATCHED,1:1_EXACT,B0009,E0009,G0009,10005.0,10005.0,10005.0,Exact amount with realistic posting-date drift.
+C010,MATCHED,1:1_EXACT,B0010,E0010,G0010,12032.0,12032.0,12032.0,Exact amount with realistic posting-date drift.
+C011,MATCHED,1:1_EXACT,B0011,E0011,G0011,12035.0,12035.0,12035.0,Exact amount with realistic posting-date drift.
+C012,MATCHED,1:1_EXACT,B0012,E0012,G0012,15064.0,15064.0,15064.0,Exact amount with realistic posting-date drift.
+C013,MATCHED,1:1_EXACT,B0013,E0013,G0013,12092.0,12092.0,12092.0,Exact amount with realistic posting-date drift.
+C014,MATCHED,1:1_EXACT,B0014,E0014,G0014,7536.0,7536.0,7536.0,Exact amount with realistic posting-date drift.
+C015,MATCHED,1:1_EXACT,B0015,E0015,G0015,15009.0,15009.0,15009.0,Exact amount with realistic posting-date drift.
+C016,MATCHED,1:1_EXACT,B0016,E0016,G0016,5026.0,5026.0,5026.0,Exact amount with realistic posting-date drift.
+C017,MATCHED,1:1_EXACT,B0017,E0017,G0017,7560.0,7560.0,7560.0,Exact amount with realistic posting-date drift.
+C018,MATCHED,1:1_EXACT,B0018,E0018,G0018,15045.0,15045.0,15045.0,Exact amount with realistic posting-date drift.
+C019,MATCHED,1:1_EXACT,B0019,E0019,G0019,5058.0,5058.0,5058.0,Exact amount with realistic posting-date drift.
+C020,MATCHED,1:1_EXACT,B0020,E0020,G0020,5052.0,5052.0,5052.0,Exact amount with realistic posting-date drift.
+C021,MATCHED,1:1_EXACT,B0021,E0021,G0021,5070.0,5070.0,5070.0,Exact amount with realistic posting-date drift.
+C022,MATCHED,1:1_EXACT,B0022,E0022,G0022,20072.0,20072.0,20072.0,Exact amount with realistic posting-date drift.
+C023,MATCHED,1:1_EXACT,B0023,E0023,G0023,10020.0,10020.0,10020.0,Exact amount with realistic posting-date drift.
+C024,MATCHED,1:1_EXACT,B0024,E0024,G0024,12027.0,12027.0,12027.0,Exact amount with realistic posting-date drift.
+C025,MATCHED,1:1_EXACT,B0025,E0025,G0025,20079.0,20079.0,20079.0,Exact amount with realistic posting-date drift.
+C026,MATCHED,1:1_EXACT,B0026,E0026,G0026,20047.0,20047.0,20047.0,Exact amount with realistic posting-date drift.
+C027,MATCHED,1:1_EXACT,B0027,E0027,G0027,20045.0,20045.0,20045.0,Exact amount with realistic posting-date drift.
+C028,MATCHED,1:1_EXACT,B0028,E0028,G0028,20048.0,20048.0,20048.0,Exact amount with realistic posting-date drift.
+C029,MATCHED,1:1_EXACT,B0029,E0029,G0029,20015.0,20015.0,20015.0,Exact amount with realistic posting-date drift.
+C030,MATCHED,1:1_EXACT,B0030,E0030,G0030,12002.0,12002.0,12002.0,Exact amount with realistic posting-date drift.
+C031,MATCHED,1:1_EXACT,B0031,E0031,G0031,15017.0,15017.0,15017.0,Exact amount with realistic posting-date drift.
+C032,MATCHED,1:1_EXACT,B0032,E0032,G0032,20070.0,20070.0,20070.0,Exact amount with realistic posting-date drift.
+C033,MATCHED,1:1_EXACT,B0033,E0033,G0033,12023.0,12023.0,12023.0,Exact amount with realistic posting-date drift.
+C034,MATCHED,1:1_EXACT,B0034,E0034,G0034,5051.0,5051.0,5051.0,Exact amount with realistic posting-date drift.
+C035,MATCHED,1:1_EXACT,B0035,E0035,G0035,5017.0,5017.0,5017.0,Exact amount with realistic posting-date drift.
+C036,MATCHED,1:N_BULK,B0036,E0036|E0037|E0038,G0036|G0037|G0038,27605.0,27605.0,27605.0,One bank credit covers 3 invoices; aggregate required.
+C037,MATCHED,1:N_BULK,B0037,E0039|E0040,G0039|G0040,15053.0,15053.0,15053.0,One bank credit covers 2 invoices; aggregate required.
+C038,MATCHED,1:N_BULK,B0038,E0041|E0042|E0043|E0044,G0041|G0042|G0043|G0044,30080.0,30080.0,30080.0,One bank credit covers 4 invoices; aggregate required.
+C039,MATCHED,1:N_BULK,B0039,E0045|E0046,G0045|G0046,7780.0,7780.0,7780.0,One bank credit covers 2 invoices; aggregate required.
+C040,MATCHED,1:N_BULK,B0040,E0047|E0048,G0047|G0048,6456.0,6456.0,6456.0,One bank credit covers 2 invoices; aggregate required.
+C041,MATCHED,1:N_BULK,B0041,E0049|E0050|E0051,G0049|G0050|G0051,23726.0,23726.0,23726.0,One bank credit covers 3 invoices; aggregate required.
+C042,MATCHED,1:N_BULK,B0042,E0052|E0053|E0054|E0055,G0052|G0053|G0054|G0055,32221.0,32221.0,32221.0,One bank credit covers 4 invoices; aggregate required.
+C043,MATCHED,1:N_BULK,B0043,E0056|E0057|E0058|E0059,G0056|G0057|G0058|G0059,25149.0,25149.0,25149.0,One bank credit covers 4 invoices; aggregate required.
+C044,MATCHED,1:N_BULK,B0044,E0060|E0061|E0062|E0063,G0060|G0061|G0062|G0063,43730.0,43730.0,43730.0,One bank credit covers 4 invoices; aggregate required.
+C045,MATCHED,1:N_BULK,B0045,E0064|E0065|E0066|E0067,G0064|G0065|G0066|G0067,32263.0,32263.0,32263.0,One bank credit covers 4 invoices; aggregate required.
+C046,MATCHED,1:N_BULK,B0046,E0068|E0069|E0070|E0071,G0068|G0069|G0070|G0071,22971.0,22971.0,22971.0,One bank credit covers 4 invoices; aggregate required.
+C047,MATCHED,1:N_BULK,B0047,E0072|E0073|E0074|E0075,G0072|G0073|G0074|G0075,41927.0,41927.0,41927.0,One bank credit covers 4 invoices; aggregate required.
+C048,MATCHED,1:N_BULK,B0048,E0076|E0077,G0076|G0077,11450.0,11450.0,11450.0,One bank credit covers 2 invoices; aggregate required.
+C049,MATCHED,1:N_BULK,B0049,E0078|E0079|E0080,G0078|G0079|G0080,35222.0,35222.0,35222.0,One bank credit covers 3 invoices; aggregate required.
+C050,MATCHED,1:N_BULK,B0050,E0081|E0082|E0083|E0084,G0081|G0082|G0083|G0084,28491.0,28491.0,28491.0,One bank credit covers 4 invoices; aggregate required.
+C051,MATCHED,1:N_BULK,B0051,E0085|E0086,G0085|G0086,19629.0,19629.0,19629.0,One bank credit covers 2 invoices; aggregate required.
+C052,MATCHED,1:N_BULK,B0052,E0087|E0088|E0089,G0087|G0088|G0089,22418.0,22418.0,22418.0,One bank credit covers 3 invoices; aggregate required.
+C053,MATCHED,1:N_BULK,B0053,E0090|E0091|E0092,G0090|G0091|G0092,20288.0,20288.0,20288.0,One bank credit covers 3 invoices; aggregate required.
+C054,MATCHED,1:N_BULK,B0054,E0093|E0094,G0093|G0094,12894.0,12894.0,12894.0,One bank credit covers 2 invoices; aggregate required.
+C055,MATCHED,1:N_BULK,B0055,E0095|E0096|E0097|E0098,G0095|G0096|G0097|G0098,39252.0,39252.0,39252.0,One bank credit covers 4 invoices; aggregate required.
+C056,MATCHED,1:N_BULK,B0056,E0099|E0100,G0099|G0100,9139.0,9139.0,9139.0,One bank credit covers 2 invoices; aggregate required.
+C057,MATCHED,1:N_BULK,B0057,E0101|E0102|E0103|E0104,G0101|G0102|G0103|G0104,39468.0,39468.0,39468.0,One bank credit covers 4 invoices; aggregate required.
+C058,MATCHED,1:N_BULK,B0058,E0105|E0106,G0105|G0106,17672.0,17672.0,17672.0,One bank credit covers 2 invoices; aggregate required.
+C059,MATCHED,1:N_BULK,B0059,E0107|E0108,G0107|G0108,16250.0,16250.0,16250.0,One bank credit covers 2 invoices; aggregate required.
+C060,MATCHED,1:N_BULK,B0060,E0109|E0110,G0109|G0110,7811.0,7811.0,7811.0,One bank credit covers 2 invoices; aggregate required.
+C061,MATCHED,1:N_BULK,B0061,E0111|E0112,G0111|G0112,21340.0,21340.0,21340.0,One bank credit covers 2 invoices; aggregate required.
+C062,MATCHED,1:N_BULK,B0062,E0113|E0114|E0115,G0113|G0114|G0115,17597.0,17597.0,17597.0,One bank credit covers 3 invoices; aggregate required.
+C063,MATCHED,1:N_BULK,B0063,E0116|E0117,G0116|G0117,21740.0,21740.0,21740.0,One bank credit covers 2 invoices; aggregate required.
+C064,MATCHED,1:N_BULK,B0064,E0118|E0119,G0118|G0119,13183.0,13183.0,13183.0,One bank credit covers 2 invoices; aggregate required.
+C065,MATCHED,1:N_BULK,B0065,E0120|E0121|E0122,G0120|G0121|G0122,15199.0,15199.0,15199.0,One bank credit covers 3 invoices; aggregate required.
+C066,MATCHED,N:1_SPLIT,B0066|B0067|B0068,E0123,G0123,45473.0,45473.0,45473.0,3 partial bank credits sum to one invoice.
+C067,MATCHED,N:1_SPLIT,B0069|B0070|B0071|B0072,E0124,G0124,59717.0,59717.0,59717.0,4 partial bank credits sum to one invoice.
+C068,MATCHED,N:1_SPLIT,B0073|B0074|B0075|B0076,E0125,G0125,55144.0,55144.0,55144.0,4 partial bank credits sum to one invoice.
+C069,MATCHED,N:1_SPLIT,B0077|B0078,E0126,G0126,44434.0,44434.0,44434.0,2 partial bank credits sum to one invoice.
+C070,MATCHED,N:1_SPLIT,B0079|B0080|B0081|B0082,E0127,G0127,30939.0,30939.0,30939.0,4 partial bank credits sum to one invoice.
+C071,MATCHED,N:1_SPLIT,B0083|B0084,E0128,G0128,34597.0,34597.0,34597.0,2 partial bank credits sum to one invoice.
+C072,MATCHED,N:1_SPLIT,B0085|B0086|B0087|B0088,E0129,G0129,32381.0,32381.0,32381.0,4 partial bank credits sum to one invoice.
+C073,MATCHED,N:1_SPLIT,B0089|B0090|B0091,E0130,G0130,22159.0,22159.0,22159.0,3 partial bank credits sum to one invoice.
+C074,MATCHED,N:1_SPLIT,B0092|B0093|B0094,E0131,G0131,31182.0,31182.0,31182.0,3 partial bank credits sum to one invoice.
+C075,MATCHED,N:1_SPLIT,B0095|B0096,E0132,G0132,39111.0,39111.0,39111.0,2 partial bank credits sum to one invoice.
+C076,MATCHED,N:1_SPLIT,B0097|B0098|B0099,E0133,G0133,54366.0,54366.0,54366.0,3 partial bank credits sum to one invoice.
+C077,MATCHED,N:1_SPLIT,B0100|B0101|B0102,E0134,G0134,28873.0,28873.0,28873.0,3 partial bank credits sum to one invoice.
+C078,MATCHED,N:1_SPLIT,B0103|B0104,E0135,G0135,64379.0,64379.0,64379.0,2 partial bank credits sum to one invoice.
+C079,MATCHED,N:1_SPLIT,B0105|B0106|B0107,E0136,G0136,53381.0,53381.0,53381.0,3 partial bank credits sum to one invoice.
+C080,MATCHED,N:1_SPLIT,B0108|B0109,E0137,G0137,28761.0,28761.0,28761.0,2 partial bank credits sum to one invoice.
+C081,MATCHED,N:1_SPLIT,B0110|B0111|B0112|B0113,E0138,G0138,61717.0,61717.0,61717.0,4 partial bank credits sum to one invoice.
+C082,MATCHED,N:1_SPLIT,B0114|B0115|B0116|B0117,E0139,G0139,30324.0,30324.0,30324.0,4 partial bank credits sum to one invoice.
+C083,MATCHED,N:1_SPLIT,B0118|B0119|B0120|B0121,E0140,G0140,45984.0,45984.0,45984.0,4 partial bank credits sum to one invoice.
+C084,MATCHED,N:1_SPLIT,B0122|B0123,E0141,G0141,25955.0,25955.0,25955.0,2 partial bank credits sum to one invoice.
+C085,MATCHED,N:1_SPLIT,B0124|B0125,E0142,G0142,39523.0,39523.0,39523.0,2 partial bank credits sum to one invoice.
+C086,MATCHED,N:1_SPLIT,B0126|B0127,E0143,G0143,34983.0,34983.0,34983.0,2 partial bank credits sum to one invoice.
+C087,MATCHED,N:1_SPLIT,B0128|B0129|B0130|B0131,E0144,G0144,62583.0,62583.0,62583.0,4 partial bank credits sum to one invoice.
+C088,MATCHED,N:1_SPLIT,B0132|B0133|B0134,E0145,G0145,27945.0,27945.0,27945.0,3 partial bank credits sum to one invoice.
+C089,MATCHED,N:1_SPLIT,B0135|B0136,E0146,G0146,61526.0,61526.0,61526.0,2 partial bank credits sum to one invoice.
+C090,MATCHED,N:1_SPLIT,B0137|B0138,E0147,G0147,52194.0,52194.0,52194.0,2 partial bank credits sum to one invoice.
+C091,MATCHED,N:M_EXACT,B0139|B0140,E0148|E0149|E0150,G0148|G0149|G0150,35787.0,35787.0,35787.0,2 bank credits reconcile against 3 invoices by total.
+C092,MATCHED,N:M_EXACT,B0141|B0142|B0143|B0144,E0151|E0152,G0151|G0152,32130.0,32130.0,32130.0,4 bank credits reconcile against 2 invoices by total.
+C093,MATCHED,N:M_EXACT,B0145|B0146,E0153|E0154,G0153|G0154,65499.0,65499.0,65499.0,2 bank credits reconcile against 2 invoices by total.
+C094,MATCHED,N:M_EXACT,B0147|B0148,E0155|E0156|E0157|E0158,G0155|G0156|G0157|G0158,40811.0,40811.0,40811.0,2 bank credits reconcile against 4 invoices by total.
+C095,MATCHED,N:M_EXACT,B0149|B0150|B0151,E0159|E0160,G0159|G0160,81733.0,81733.0,81733.0,3 bank credits reconcile against 2 invoices by total.
+C096,MATCHED,N:M_EXACT,B0152|B0153,E0161|E0162|E0163|E0164,G0161|G0162|G0163|G0164,86434.0,86434.0,86434.0,2 bank credits reconcile against 4 invoices by total.
+C097,MATCHED,N:M_EXACT,B0154|B0155,E0165|E0166,G0165|G0166,43116.0,43116.0,43116.0,2 bank credits reconcile against 2 invoices by total.
+C098,MATCHED,N:M_EXACT,B0156|B0157|B0158|B0159,E0167|E0168,G0167|G0168,72630.0,72630.0,72630.0,4 bank credits reconcile against 2 invoices by total.
+C099,MATCHED,N:M_EXACT,B0160|B0161|B0162,E0169|E0170|E0171,G0169|G0170|G0171,87887.0,87887.0,87887.0,3 bank credits reconcile against 3 invoices by total.
+C100,MATCHED,N:M_EXACT,B0163|B0164|B0165|B0166,E0172|E0173|E0174,G0172|G0173|G0174,63627.0,63627.0,63627.0,4 bank credits reconcile against 3 invoices by total.
+C101,MATCHED,N:M_EXACT,B0167|B0168|B0169|B0170,E0175|E0176|E0177,G0175|G0176|G0177,58610.0,58610.0,58610.0,4 bank credits reconcile against 3 invoices by total.
+C102,MATCHED,N:M_EXACT,B0171|B0172|B0173|B0174,E0178|E0179,G0178|G0179,81398.0,81398.0,81398.0,4 bank credits reconcile against 2 invoices by total.
+C103,MATCHED,N:M_EXACT,B0175|B0176|B0177|B0178,E0180|E0181|E0182,G0180|G0181|G0182,62221.0,62221.0,62221.0,4 bank credits reconcile against 3 invoices by total.
+C104,MATCHED,N:M_EXACT,B0179|B0180|B0181|B0182,E0183|E0184,G0183|G0184,77286.0,77286.0,77286.0,4 bank credits reconcile against 2 invoices by total.
+C105,MATCHED,N:M_EXACT,B0183|B0184|B0185|B0186,E0185|E0186|E0187,G0185|G0186|G0187,63253.0,63253.0,63253.0,4 bank credits reconcile against 3 invoices by total.
+C106,MATCHED,N:M_EXACT,B0187|B0188|B0189,E0188|E0189|E0190,G0188|G0189|G0190,87980.0,87980.0,87980.0,3 bank credits reconcile against 3 invoices by total.
+C107,MATCHED,N:M_EXACT,B0190|B0191,E0191|E0192|E0193|E0194,G0191|G0192|G0193|G0194,57491.0,57491.0,57491.0,2 bank credits reconcile against 4 invoices by total.
+C108,MATCHED,N:M_EXACT,B0192|B0193|B0194,E0195|E0196|E0197|E0198,G0195|G0196|G0197|G0198,62570.0,62570.0,62570.0,3 bank credits reconcile against 4 invoices by total.
+C109,MATCHED,N:M_EXACT,B0195|B0196,E0199|E0200|E0201,G0199|G0200|G0201,30751.0,30751.0,30751.0,2 bank credits reconcile against 3 invoices by total.
+C110,MATCHED,N:M_EXACT,B0197|B0198,E0202|E0203,G0202|G0203,66159.0,66159.0,66159.0,2 bank credits reconcile against 2 invoices by total.
+C111,MATCHED,FEE_GST,B0199,E0204,G0204,22757.93,23407.0,22757.93,Bank equals gross less variable fee 550.06 and GST 99.01.
+C112,MATCHED,FEE_GST,B0200,E0205,G0205,80890.92,83198.0,80890.92,Bank equals gross less variable fee 1955.15 and GST 351.93.
+C113,MATCHED,FEE_GST,B0201,E0206,G0206,39495.55,40622.0,39495.55,Bank equals gross less variable fee 954.62 and GST 171.83.
+C114,MATCHED,FEE_GST,B0202,E0207,G0207,81643.27,83415.0,81643.27,Bank equals gross less variable fee 1501.47 and GST 270.26.
+C115,MATCHED,FEE_GST,B0203,E0208,G0208,33498.06,34225.0,33498.06,Bank equals gross less variable fee 616.05 and GST 110.89.
+C116,MATCHED,FEE_GST,B0204,E0209,G0209,69654.42,71338.0,69654.42,Bank equals gross less variable fee 1426.76 and GST 256.82.
+C117,MATCHED,FEE_GST,B0205,E0210,G0210,74606.72,76410.0,74606.72,Bank equals gross less variable fee 1528.2 and GST 275.08.
+C118,MATCHED,FEE_GST,B0206,E0211,G0211,22727.66,23277.0,22727.66,Bank equals gross less variable fee 465.54 and GST 83.8.
+C119,MATCHED,FEE_GST,B0207,E0212,G0212,15410.43,15802.0,15410.43,Bank equals gross less variable fee 331.84 and GST 59.73.
+C120,MATCHED,FEE_GST,B0208,E0213,G0213,16512.06,16983.0,16512.06,Bank equals gross less variable fee 399.1 and GST 71.84.
+C121,MATCHED,FEE_GST,B0209,E0214,G0214,50944.65,52176.0,50944.65,Bank equals gross less variable fee 1043.52 and GST 187.83.
+C122,MATCHED,FEE_GST,B0210,E0215,G0215,27183.11,27773.0,27183.11,Bank equals gross less variable fee 499.91 and GST 89.98.
+C123,MATCHED,FEE_GST,B0211,E0216,G0216,37586.52,38495.0,37586.52,Bank equals gross less variable fee 769.9 and GST 138.58.
+C124,MATCHED,FEE_GST,B0212,E0217,G0217,39907.96,40922.0,39907.96,Bank equals gross less variable fee 859.36 and GST 154.68.
+C125,MATCHED,FEE_GST,B0213,E0218,G0218,35139.78,36142.0,35139.78,Bank equals gross less variable fee 849.34 and GST 152.88.
+C126,MATCHED,FEE_GST,B0214,E0219,G0219,67451.66,69082.0,67451.66,Bank equals gross less variable fee 1381.64 and GST 248.7.
+C127,MATCHED,FEE_GST,B0215,E0220,G0220,57465.05,58854.0,57465.05,Bank equals gross less variable fee 1177.08 and GST 211.87.
+C128,MATCHED,FEE_GST,B0216,E0221,G0221,51857.65,52983.0,51857.65,Bank equals gross less variable fee 953.69 and GST 171.66.
+C129,MATCHED,FEE_GST,B0217,E0222,G0222,28795.99,29492.0,28795.99,Bank equals gross less variable fee 589.84 and GST 106.17.
+C130,MATCHED,FEE_GST,B0218,E0223,G0223,40984.39,41975.0,40984.39,Bank equals gross less variable fee 839.5 and GST 151.11.
+C131,MATCHED,PARTIAL_REFUND,B0219,E0224,G0224|G0225,59924.0,71221.0,59924.0,Charge and refund events net to bank credit.
+C132,MATCHED,PARTIAL_REFUND,B0220,E0225,G0226|G0227,50201.0,67059.0,50201.0,Charge and refund events net to bank credit.
+C133,MATCHED,PARTIAL_REFUND,B0221,E0226,G0228|G0229,30926.0,43267.0,30926.0,Charge and refund events net to bank credit.
+C134,MATCHED,PARTIAL_REFUND,B0222,E0227,G0230|G0231,70057.0,72184.0,70057.0,Charge and refund events net to bank credit.
+C135,MATCHED,PARTIAL_REFUND,B0223,E0228,G0232|G0233,47018.0,59047.0,47018.0,Charge and refund events net to bank credit.
+C136,MATCHED,PARTIAL_REFUND,B0224,E0229,G0234|G0235,32261.0,38609.0,32261.0,Charge and refund events net to bank credit.
+C137,MATCHED,PARTIAL_REFUND,B0225,E0230,G0236|G0237,35473.0,38826.0,35473.0,Charge and refund events net to bank credit.
+C138,MATCHED,PARTIAL_REFUND,B0226,E0231,G0238|G0239,53423.0,69516.0,53423.0,Charge and refund events net to bank credit.
+C139,MATCHED,PARTIAL_REFUND,B0227,E0232,G0240|G0241,28622.0,41865.0,28622.0,Charge and refund events net to bank credit.
+C140,MATCHED,PARTIAL_REFUND,B0228,E0233,G0242|G0243,30672.0,39648.0,30672.0,Charge and refund events net to bank credit.
+C141,MATCHED,PARTIAL_REFUND,B0229,E0234,G0244|G0245,54769.0,80291.0,54769.0,Charge and refund events net to bank credit.
+C142,MATCHED,PARTIAL_REFUND,B0230,E0235,G0246|G0247,36074.0,38791.0,36074.0,Charge and refund events net to bank credit.
+C143,MATCHED,PARTIAL_REFUND,B0231,E0236,G0248|G0249,30332.0,41725.0,30332.0,Charge and refund events net to bank credit.
+C144,MATCHED,PARTIAL_REFUND,B0232,E0237,G0250|G0251,57794.0,63950.0,57794.0,Charge and refund events net to bank credit.
+C145,MATCHED,PARTIAL_REFUND,B0233,E0238,G0252|G0253,50969.0,71217.0,50969.0,Charge and refund events net to bank credit.
+C146,MATCHED,DUPLICATE_AMOUNT,B0234|B0235,E0239|E0240,G0254|G0255,40000.0,40000.0,40000.0,Two same-amount payments; amount-only matching is insufficient.
+C147,MATCHED,DUPLICATE_AMOUNT,B0236|B0237,E0241|E0242,G0256|G0257,30000.0,30000.0,30000.0,Two same-amount payments; amount-only matching is insufficient.
+C148,MATCHED,DUPLICATE_AMOUNT,B0238|B0239,E0243|E0244,G0258|G0259,40000.0,40000.0,40000.0,Two same-amount payments; amount-only matching is insufficient.
+C149,MATCHED,DUPLICATE_AMOUNT,B0240|B0241,E0245|E0246,G0260|G0261,50000.0,50000.0,50000.0,Two same-amount payments; amount-only matching is insufficient.
+C150,MATCHED,DUPLICATE_AMOUNT,B0242|B0243,E0247|E0248,G0262|G0263,30000.0,30000.0,30000.0,Two same-amount payments; amount-only matching is insufficient.
+C151,MATCHED,DUPLICATE_AMOUNT,B0244|B0245,E0249|E0250,G0264|G0265,50000.0,50000.0,50000.0,Two same-amount payments; amount-only matching is insufficient.
+C152,MATCHED,DUPLICATE_AMOUNT,B0246|B0247,E0251|E0252,G0266|G0267,20000.0,20000.0,20000.0,Two same-amount payments; amount-only matching is insufficient.
+C153,MATCHED,DUPLICATE_AMOUNT,B0248|B0249,E0253|E0254,G0268|G0269,30000.0,30000.0,30000.0,Two same-amount payments; amount-only matching is insufficient.
+C154,MATCHED,DUPLICATE_AMOUNT,B0250|B0251,E0255|E0256,G0270|G0271,40000.0,40000.0,40000.0,Two same-amount payments; amount-only matching is insufficient.
+C155,MATCHED,DUPLICATE_AMOUNT,B0252|B0253,E0257|E0258,G0272|G0273,30000.0,30000.0,30000.0,Two same-amount payments; amount-only matching is insufficient.
+C156,MATCHED,ROUNDING_TOLERANCE,B0254,E0259,G0274,33134.23,33134.25,33134.25,Intentional paise difference -0.02; tolerance required.
+C157,MATCHED,ROUNDING_TOLERANCE,B0255,E0260,G0275,45676.4,45676.42,45676.42,Intentional paise difference -0.02; tolerance required.
+C158,MATCHED,ROUNDING_TOLERANCE,B0256,E0261,G0276,24161.34,24161.35,24161.35,Intentional paise difference -0.01; tolerance required.
+C159,MATCHED,ROUNDING_TOLERANCE,B0257,E0262,G0277,7949.2,7949.19,7949.19,Intentional paise difference 0.01; tolerance required.
+C160,MATCHED,ROUNDING_TOLERANCE,B0258,E0263,G0278,46381.09,46381.11,46381.11,Intentional paise difference -0.02; tolerance required.
+C161,MATCHED,ROUNDING_TOLERANCE,B0259,E0264,G0279,49413.95,49413.94,49413.94,Intentional paise difference 0.01; tolerance required.
+C162,MATCHED,ROUNDING_TOLERANCE,B0260,E0265,G0280,33941.78,33941.77,33941.77,Intentional paise difference 0.01; tolerance required.
+C163,MATCHED,ROUNDING_TOLERANCE,B0261,E0266,G0281,32779.2,32779.18,32779.18,Intentional paise difference 0.02; tolerance required.
+C164,MATCHED,ROUNDING_TOLERANCE,B0262,E0267,G0282,31834.58,31834.6,31834.6,Intentional paise difference -0.02; tolerance required.
+C165,MATCHED,ROUNDING_TOLERANCE,B0263,E0268,G0283,46848.24,46848.23,46848.23,Intentional paise difference 0.01; tolerance required.
+C166,UNMATCHED,BANK_ONLY,B0264,,,44904.0,0.0,0.0,Bank-only credit; remain unmatched.
+C167,UNMATCHED,BANK_ONLY,B0265,,,32191.0,0.0,0.0,Bank-only credit; remain unmatched.
+C168,UNMATCHED,BANK_ONLY,B0266,,,12627.0,0.0,0.0,Bank-only credit; remain unmatched.
+C169,UNMATCHED,BANK_ONLY,B0267,,,32062.0,0.0,0.0,Bank-only credit; remain unmatched.
+C170,UNMATCHED,BANK_ONLY,B0268,,,10814.0,0.0,0.0,Bank-only credit; remain unmatched.
+C171,UNMATCHED,BANK_ONLY,B0269,,,19024.0,0.0,0.0,Bank-only credit; remain unmatched.
+C172,UNMATCHED,BANK_ONLY,B0270,,,44823.0,0.0,0.0,Bank-only credit; remain unmatched.
+C173,UNMATCHED,BANK_ONLY,B0271,,,6649.0,0.0,0.0,Bank-only credit; remain unmatched.
+C174,UNMATCHED,ERP_ONLY,,E0269,,0.0,8760.0,0.0,Open ERP invoice with no payment.
+C175,UNMATCHED,ERP_ONLY,,E0270,,0.0,32959.0,0.0,Open ERP invoice with no payment.
+C176,UNMATCHED,ERP_ONLY,,E0271,,0.0,10240.0,0.0,Open ERP invoice with no payment.
+C177,UNMATCHED,ERP_ONLY,,E0272,,0.0,47029.0,0.0,Open ERP invoice with no payment.
+C178,UNMATCHED,ERP_ONLY,,E0273,,0.0,24006.0,0.0,Open ERP invoice with no payment.
+C179,UNMATCHED,ERP_ONLY,,E0274,,0.0,15706.0,0.0,Open ERP invoice with no payment.
+C180,UNMATCHED,ERP_ONLY,,E0275,,0.0,18438.0,0.0,Open ERP invoice with no payment.
+C181,UNMATCHED,ERP_ONLY,,E0276,,0.0,22931.0,0.0,Open ERP invoice with no payment.
+C182,UNMATCHED,GATEWAY_ONLY,,,G0284,0.0,0.0,48778.0,Gateway settlement with no counterpart.
+C183,UNMATCHED,GATEWAY_ONLY,,,G0285,0.0,0.0,46620.0,Gateway settlement with no counterpart.
+C184,UNMATCHED,GATEWAY_ONLY,,,G0286,0.0,0.0,44462.0,Gateway settlement with no counterpart.
+C185,UNMATCHED,GATEWAY_ONLY,,,G0287,0.0,0.0,16883.0,Gateway settlement with no counterpart.
+C186,UNMATCHED,GATEWAY_ONLY,,,G0288,0.0,0.0,38752.0,Gateway settlement with no counterpart.
+C187,UNMATCHED,GATEWAY_ONLY,,,G0289,0.0,0.0,31742.0,Gateway settlement with no counterpart.
+C188,UNMATCHED,GATEWAY_ONLY,,,G0290,0.0,0.0,16908.0,Gateway settlement with no counterpart.
+C189,UNMATCHED,GATEWAY_ONLY,,,G0291,0.0,0.0,37562.0,Gateway settlement with no counterpart.
+C190,UNMATCHED,WRONG_CUSTOMER_SAME_AMOUNT,B0272,E0277,G0292,20000.0,20000.0,20000.0,Same amount but customer conflict; do not auto-match.
+C191,UNMATCHED,WRONG_CUSTOMER_SAME_AMOUNT,B0273,E0278,G0293,30000.0,30000.0,30000.0,Same amount but customer conflict; do not auto-match.
+C192,UNMATCHED,WRONG_CUSTOMER_SAME_AMOUNT,B0274,E0279,G0294,15000.0,15000.0,15000.0,Same amount but customer conflict; do not auto-match.
+C193,UNMATCHED,WRONG_CUSTOMER_SAME_AMOUNT,B0275,E0280,G0295,25000.0,25000.0,25000.0,Same amount but customer conflict; do not auto-match.
+C194,UNMATCHED,WRONG_CUSTOMER_SAME_AMOUNT,B0276,E0281,G0296,15000.0,15000.0,15000.0,Same amount but customer conflict; do not auto-match.
+C195,UNMATCHED,WRONG_CUSTOMER_SAME_AMOUNT,B0277,E0282,G0297,12000.0,12000.0,12000.0,Same amount but customer conflict; do not auto-match.
+C196,UNMATCHED,UNEXPLAINED_AMOUNT_MISMATCH,B0278,E0283,G0298,32782.0,33033.0,33033.0,Difference 251 has no valid explanation.
+C197,UNMATCHED,UNEXPLAINED_AMOUNT_MISMATCH,B0279,E0284,G0299,39080.0,40580.0,40580.0,Difference 1500 has no valid explanation.
+C198,UNMATCHED,UNEXPLAINED_AMOUNT_MISMATCH,B0280,E0285,G0300,39241.0,39492.0,39492.0,Difference 251 has no valid explanation.
+C199,UNMATCHED,UNEXPLAINED_AMOUNT_MISMATCH,B0281,E0286,G0301,17404.0,18403.0,18403.0,Difference 999 has no valid explanation.
+C200,UNMATCHED,UNEXPLAINED_AMOUNT_MISMATCH,B0282,E0287,G0302,29065.0,30565.0,30565.0,Difference 1500 has no valid explanation.
+C201,UNMATCHED,STALE_DATE,B0283,E0288,G0303,16844.0,16844.0,16844.0,Same amount/customer but date gap intentionally too large.
+C202,UNMATCHED,STALE_DATE,B0284,E0289,G0304,23416.0,23416.0,23416.0,Same amount/customer but date gap intentionally too large.
+C203,UNMATCHED,STALE_DATE,B0285,E0290,G0305,19256.0,19256.0,19256.0,Same amount/customer but date gap intentionally too large.
+C204,UNMATCHED,STALE_DATE,B0286,E0291,G0306,24858.0,24858.0,24858.0,Same amount/customer but date gap intentionally too large.
+C205,UNMATCHED,STALE_DATE,B0287,E0292,G0307,19376.0,19376.0,19376.0,Same amount/customer but date gap intentionally too large.

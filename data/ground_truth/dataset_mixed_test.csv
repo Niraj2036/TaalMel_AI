@@ -1,0 +1,51 @@
+case_id,expected_status,pattern,bank_transaction_ids,erp_invoice_ids,gateway_transaction_ids,notes
+M001,MATCHED,EASY_1_TO_1,B001,E001,G001,Exact amount and clean reference.
+M002,MATCHED,EASY_1_TO_1,B002,E002,G002,Exact amount and clean reference.
+M003,MATCHED,EASY_1_TO_1,B003,E003,G003,Exact amount and clean reference.
+M004,MATCHED,EASY_1_TO_1,B004,E004,G004,Exact amount and clean reference.
+M005,MATCHED,EASY_1_TO_1,B005,E005,G005,Exact amount and clean reference.
+M006,MATCHED,EASY_1_TO_1,B006,E006,G006,Exact amount and clean reference.
+M007,MATCHED,EASY_1_TO_1,B007,E007,G007,Exact amount and clean reference.
+M008,MATCHED,EASY_1_TO_1,B008,E008,G008,Exact amount and clean reference.
+M009,MATCHED,EASY_1_TO_1,B009,E009,G009,Exact amount and clean reference.
+M010,MATCHED,EASY_1_TO_1,B010,E010,G010,Exact amount and clean reference.
+M011,MATCHED,EASY_1_TO_1,B011,E011,G011,Exact amount and clean reference.
+M012,MATCHED,EASY_1_TO_1,B012,E012,G012,Exact amount and clean reference.
+M013,MATCHED,MEDIUM_1_TO_N,B013,E013|E014,G013|G014,One bank credit aggregates two invoices.
+M014,MATCHED,MEDIUM_1_TO_N,B014,E015|E016,G015|G016,One bank credit aggregates two invoices.
+M015,MATCHED,MEDIUM_1_TO_N,B015,E017|E018,G017|G018,One bank credit aggregates two invoices.
+M016,MATCHED,MEDIUM_1_TO_N,B016,E019|E020,G019|G020,One bank credit aggregates two invoices.
+M017,MATCHED,MEDIUM_1_TO_N,B017,E021|E022,G021|G022,One bank credit aggregates two invoices.
+M018,MATCHED,MEDIUM_1_TO_N,B018,E023|E024,G023|G024,One bank credit aggregates two invoices.
+M019,MATCHED,MEDIUM_1_TO_N,B019,E025|E026,G025|G026,One bank credit aggregates two invoices.
+M020,MATCHED,MEDIUM_1_TO_N,B020,E027|E028,G027|G028,One bank credit aggregates two invoices.
+M021,MATCHED,MEDIUM_N_TO_1,B021|B022,E029,G029,Two partial bank credits complete one invoice.
+M022,MATCHED,MEDIUM_N_TO_1,B023|B024,E030,G030,Two partial bank credits complete one invoice.
+M023,MATCHED,MEDIUM_N_TO_1,B025|B026,E031,G031,Two partial bank credits complete one invoice.
+M024,MATCHED,MEDIUM_N_TO_1,B027|B028,E032,G032,Two partial bank credits complete one invoice.
+M025,MATCHED,MEDIUM_N_TO_1,B029|B030,E033,G033,Two partial bank credits complete one invoice.
+M026,MATCHED,MEDIUM_N_TO_1,B031|B032,E034,G034,Two partial bank credits complete one invoice.
+M027,MATCHED,HARD_N_TO_M,B033|B034,E035|E036|E037,G035|G036|G037,Different partitions; only aggregate total balances.
+M028,MATCHED,HARD_N_TO_M,B035|B036,E038|E039|E040,G038|G039|G040,Different partitions; only aggregate total balances.
+M029,MATCHED,HARD_N_TO_M,B037|B038,E041|E042|E043,G041|G042|G043,Different partitions; only aggregate total balances.
+M030,MATCHED,HARD_N_TO_M,B039|B040,E044|E045|E046,G044|G045|G046,Different partitions; only aggregate total balances.
+M031,MATCHED,HARD_N_TO_M,B041|B042,E047|E048|E049,G047|G048|G049,Different partitions; only aggregate total balances.
+M032,MATCHED,HARD_FEE_GST,B043,E050,G050,Bank equals gross minus fee and GST.
+M033,MATCHED,HARD_FEE_GST,B044,E051,G051,Bank equals gross minus fee and GST.
+M034,MATCHED,HARD_FEE_GST,B045,E052,G052,Bank equals gross minus fee and GST.
+M035,MATCHED,HARD_FEE_GST,B046,E053,G053,Bank equals gross minus fee and GST.
+M036,MATCHED,HARD_REFUND,B047,E054,G054|G055,Charge plus refund netted.
+M037,MATCHED,HARD_REFUND,B048,E055,G056|G057,Charge plus refund netted.
+M038,MATCHED,HARD_REFUND,B049,E056,G058|G059,Charge plus refund netted.
+M039,MATCHED,HARD_LATE_VALID,B050,E057,G060,Valid 28-day delay.
+M040,MATCHED,HARD_LATE_VALID,B051,E058,G061,Valid 28-day delay.
+M041,MATCHED,HARD_DUPLICATE_AMOUNT,B052|B053,E059|E060,G062|G063,Same amount; customer/reference disambiguates.
+M042,MATCHED,HARD_DUPLICATE_AMOUNT,B054|B055,E061|E062,G064|G065,Same amount; customer/reference disambiguates.
+M043,MATCHED,HARD_DUPLICATE_AMOUNT,B056|B057,E063|E064,G066|G067,Same amount; customer/reference disambiguates.
+M044,MATCHED,HARD_ROUNDING,B058,E065,G068,Paise difference 0.02 within tolerance.
+M045,MATCHED,HARD_ROUNDING,B059,E066,G069,Paise difference -0.03 within tolerance.
+M046,UNMATCHED,TRAP_BANK_ONLY,B060,,,No counterpart.
+M047,UNMATCHED,TRAP_ERP_ONLY,,E067,,No payment.
+M048,UNMATCHED,TRAP_GATEWAY_ONLY,,,G070,No counterpart.
+M049,UNMATCHED,TRAP_WRONG_CUSTOMER,B061,E068,G071,Exact amount but wrong customer.
+M050,UNMATCHED,TRAP_COMBINATORIAL_FALSE_POSITIVE,B062,E069|E070,G072|G073,Exact subset sum but customer/date contradict.

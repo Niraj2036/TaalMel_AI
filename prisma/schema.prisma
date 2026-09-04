@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model ReconciliationRun {
+  id                 String        @id @default(cuid())
+  idempotencyKey     String        @unique
+  status             String        @default("PROCESSING")
+  totalRecords       Int           @default(0)
+  matchedRecords     Int           @default(0)
+  exceptionCount     Int           @default(0)
+  matchRate          Float         @default(0)
+  precision          Float         @default(0)
+  recall             Float         @default(0)
+  falseAutoRate      Float         @default(0)
+  exceptionIntegrity Float         @default(0)
+  throughputRps      Float         @default(0)
+  reviewRate         Float         @default(0)
+  processingTimeMs   Int           @default(0)
+  batchHash          String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  auditTrail         AuditEntry[]
+  exceptions         Exception[]
+  matches            Match[]
+  transactions       Transaction[]
+}
+
+model Transaction {
+  id           String             @id @default(cuid())
+  runId        String
+  source       String
+  txnId        String
+  referenceId  String?
+  utr          String?
+  settlementId String?
+  amount       Int
+  currency     String             @default("INR")
+  txnDate      DateTime
+  feeAmount    Int                @default(0)
+  taxAmount    Int                @default(0)
+  txnType      String             @default("PAYMENT")
+  merchant     String?
+  narration    String?
+  rawData      String
+  status       String             @default("UNMATCHED")
+  matchLinks   MatchTransaction[]
+  run          ReconciliationRun  @relation(fields: [runId], references: [id])
+
+  @@index([runId, source])
+  @@index([txnId])
+  @@index([utr])
+  @@index([amount])
+  @@index([settlementId])
+}
+
+model Match {
+  id              String             @id @default(cuid())
+  runId           String
+  matchType       String
+  matchPass       String
+  evidenceScore   Int                @default(0)
+  evidenceDetails String?
+  isProven        Boolean            @default(false)
+  createdAt       DateTime           @default(now())
+  run             ReconciliationRun  @relation(fields: [runId], references: [id])
+  transactions    MatchTransaction[]
+}
+
+model MatchTransaction {
+  matchId       String
+  transactionId String
+  match         Match       @relation(fields: [matchId], references: [id])
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+
+  @@id([matchId, transactionId])
+}
+
+model Exception {
+  id              String            @id @default(cuid())
+  runId           String
+  exceptionType   String
+  severity        String            @default("MEDIUM")
+  transactionIds  String
+  expectedAmount  Int?
+  actualAmount    Int?
+  difference      Int?
+  description     String
+  metadata        String?
+  agingFlag       String            @default("NORMAL")
+  status          String            @default("OPEN")
+  resolvedBy      String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  run             ReconciliationRun @relation(fields: [runId], references: [id])
+  journalProposal JournalProposal?
+}
+
+model JournalProposal {
+  id          String        @id @default(cuid())
+  exceptionId String        @unique
+  proposedBy  String
+  status      String        @default("PENDING")
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  lines       JournalLine[]
+  exception   Exception     @relation(fields: [exceptionId], references: [id])
+}
+
+model JournalLine {
+  id          String          @id @default(cuid())
+  proposalId  String
+  accountCode String
+  accountName String
+  direction   String
+  amount      Int
+  proposal    JournalProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+}
+
+model Policy {
+  id         String   @id @default(cuid())
+  name       String
+  nlpeSource String
+  ruleJson   String
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
+
+model AuditEntry {
+  id         String             @id @default(cuid())
+  runId      String?
+  entityId   String
+  entityType String
+  action     String
+  actor      String
+  details    String?
+  hash       String
+  createdAt  DateTime           @default(now())
+  run        ReconciliationRun? @relation(fields: [runId], references: [id])
+}

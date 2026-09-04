@@ -1,0 +1,101 @@
+case_id,expected_status,pattern,bank_transaction_ids,erp_invoice_ids,gateway_transaction_ids,expected_bank_total,expected_erp_gross_total,expected_gateway_net_total,notes
+C001,MATCHED,1:1,B001,E001,G001,42905.0,42905,42905.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C002,MATCHED,1:1,B002,E002,G002,8296.0,8296,8296.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C003,MATCHED,1:1,B003,E003,G003,2639.0,2639,2639.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C004,MATCHED,1:1,B004,E004,G004,49598.0,49598,49598.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C005,MATCHED,1:1,B005,E005,G005,19024.0,19024,19024.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C006,MATCHED,1:1,B006,E006,G006,17049.0,17049,17049.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C007,MATCHED,1:1,B007,E007,G007,15628.0,15628,15628.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C008,MATCHED,1:1,B008,E008,G008,10144.0,10144,10144.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C009,MATCHED,1:1,B009,E009,G009,49265.0,49265,49265.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C010,MATCHED,1:1,B010,E010,G010,7717.0,7717,7717.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C011,MATCHED,1:1,B011,E011,G011,45348.0,45348,45348.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C012,MATCHED,1:1,B012,E012,G012,49540.0,49540,49540.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C013,MATCHED,1:1,B013,E013,G013,36741.0,36741,36741.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C014,MATCHED,1:1,B014,E014,G014,6697.0,6697,6697.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C015,MATCHED,1:1,B015,E015,G015,39698.0,39698,39698.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C016,MATCHED,1:1,B016,E016,G016,28651.0,28651,28651.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C017,MATCHED,1:1,B017,E017,G017,3082.0,3082,3082.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C018,MATCHED,1:1,B018,E018,G018,2952.0,2952,2952.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C019,MATCHED,1:1,B019,E019,G019,7140.0,7140,7140.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C020,MATCHED,1:1,B020,E020,G020,15328.0,15328,15328.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C021,MATCHED,1:1,B021,E021,G021,16247.0,16247,16247.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C022,MATCHED,1:1,B022,E022,G022,34118.0,34118,34118.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C023,MATCHED,1:1,B023,E023,G023,40453.0,40453,40453.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C024,MATCHED,1:1,B024,E024,G024,2739.0,2739,2739.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C025,MATCHED,1:1,B025,E025,G025,37781.0,37781,37781.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C026,MATCHED,1:1,B026,E026,G026,14031.0,14031,14031.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C027,MATCHED,1:1,B027,E027,G027,47925.0,47925,47925.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C028,MATCHED,1:1,B028,E028,G028,43590.0,43590,43590.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C029,MATCHED,1:1,B029,E029,G029,46962.0,46962,46962.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C030,MATCHED,1:1,B030,E030,G030,36713.0,36713,36713.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C031,MATCHED,1:1,B031,E031,G031,28493.0,28493,28493.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C032,MATCHED,1:1,B032,E032,G032,15446.0,15446,15446.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C033,MATCHED,1:1,B033,E033,G033,30439.0,30439,30439.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C034,MATCHED,1:1,B034,E034,G034,39618.0,39618,39618.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C035,MATCHED,1:1,B035,E035,G035,19231.0,19231,19231.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C036,MATCHED,1:1,B036,E036,G036,1425.0,1425,1425.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C037,MATCHED,1:1,B037,E037,G037,11463.0,11463,11463.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C038,MATCHED,1:1,B038,E038,G038,46753.0,46753,46753.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C039,MATCHED,1:1,B039,E039,G039,28696.0,28696,28696.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C040,MATCHED,1:1,B040,E040,G040,23298.0,23298,23298.0,Exact one bank payment ↔ one invoice ↔ one gateway settlement
+C041,MATCHED,1:N,B041,E041|E042|E043,G041|G042|G043,13626.0,13626,13626.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C042,MATCHED,1:N,B042,E044|E045,G044|G045,9188.0,9188,9188.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C043,MATCHED,1:N,B043,E046|E047|E048,G046|G047|G048,12327.0,12327,12327.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C044,MATCHED,1:N,B044,E049|E050,G049|G050,13516.0,13516,13516.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C045,MATCHED,1:N,B045,E051|E052|E053,G051|G052|G053,17935.0,17935,17935.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C046,MATCHED,1:N,B046,E054|E055,G054|G055,18312.0,18312,18312.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C047,MATCHED,1:N,B047,E056|E057|E058,G056|G057|G058,12537.0,12537,12537.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C048,MATCHED,1:N,B048,E059|E060,G059|G060,15847.0,15847,15847.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C049,MATCHED,1:N,B049,E061|E062|E063,G061|G062|G063,29357.0,29357,29357.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C050,MATCHED,1:N,B050,E064|E065,G064|G065,14609.0,14609,14609.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C051,MATCHED,1:N,B051,E066|E067|E068,G066|G067|G068,15723.0,15723,15723.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C052,MATCHED,1:N,B052,E069|E070,G069|G070,10474.0,10474,10474.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C053,MATCHED,1:N,B053,E071|E072|E073,G071|G072|G073,9775.0,9775,9775.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C054,MATCHED,1:N,B054,E074|E075,G074|G075,12781.0,12781,12781.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C055,MATCHED,1:N,B055,E076|E077|E078,G076|G077|G078,26820.0,26820,26820.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C056,MATCHED,1:N,B056,E079|E080,G079|G080,10729.0,10729,10729.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C057,MATCHED,1:N,B057,E081|E082|E083,G081|G082|G083,23232.0,23232,23232.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C058,MATCHED,1:N,B058,E084|E085,G084|G085,16991.0,16991,16991.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C059,MATCHED,1:N,B059,E086|E087|E088,G086|G087|G088,24552.0,24552,24552.0,One bank deposit ↔ 3 invoices and 3 gateway settlements
+C060,MATCHED,1:N,B060,E089|E090,G089|G090,13554.0,13554,13554.0,One bank deposit ↔ 2 invoices and 2 gateway settlements
+C061,MATCHED,N:1,B061|B062,E091,G091,62784.0,62784,62784.0,2 bank payments ↔ one invoice ↔ one gateway settlement
+C062,MATCHED,N:1,B063|B064|B065,E092,G092,25708.0,25708,25708.0,3 bank payments ↔ one invoice ↔ one gateway settlement
+C063,MATCHED,N:1,B066|B067,E093,G093,32691.0,32691,32691.0,2 bank payments ↔ one invoice ↔ one gateway settlement
+C064,MATCHED,N:1,B068|B069|B070,E094,G094,60099.0,60099,60099.0,3 bank payments ↔ one invoice ↔ one gateway settlement
+C065,MATCHED,N:1,B071|B072,E095,G095,59866.0,59866,59866.0,2 bank payments ↔ one invoice ↔ one gateway settlement
+C066,MATCHED,N:1,B073|B074|B075,E096,G096,65352.0,65352,65352.0,3 bank payments ↔ one invoice ↔ one gateway settlement
+C067,MATCHED,N:1,B076|B077,E097,G097,30010.0,30010,30010.0,2 bank payments ↔ one invoice ↔ one gateway settlement
+C068,MATCHED,N:1,B078|B079|B080,E098,G098,67759.0,67759,67759.0,3 bank payments ↔ one invoice ↔ one gateway settlement
+C069,MATCHED,N:1,B081|B082,E099,G099,32546.0,32546,32546.0,2 bank payments ↔ one invoice ↔ one gateway settlement
+C070,MATCHED,N:1,B083|B084|B085,E100,G100,28826.0,28826,28826.0,3 bank payments ↔ one invoice ↔ one gateway settlement
+C071,MATCHED,N:1,B086|B087,E101,G101,28934.0,28934,28934.0,2 bank payments ↔ one invoice ↔ one gateway settlement
+C072,MATCHED,N:1,B088|B089|B090,E102,G102,47717.0,47717,47717.0,3 bank payments ↔ one invoice ↔ one gateway settlement
+C073,MATCHED,N:1,B091|B092,E103,G103,45071.0,45071,45071.0,2 bank payments ↔ one invoice ↔ one gateway settlement
+C074,MATCHED,N:1,B093|B094|B095,E104,G104,32359.0,32359,32359.0,3 bank payments ↔ one invoice ↔ one gateway settlement
+C075,MATCHED,N:1,B096|B097,E105,G105,63823.0,63823,63823.0,2 bank payments ↔ one invoice ↔ one gateway settlement
+C076,MATCHED,N:M,B098|B099|B100,E106|E107,G106|G107,65322.0,65322,65322.0,3 bank payments ↔ 2 invoices (N:M); totals reconcile
+C077,MATCHED,N:M,B101|B102,E108|E109,G108|G109,58077.0,58077,58077.0,2 bank payments ↔ 2 invoices (N:M); totals reconcile
+C078,MATCHED,N:M,B103|B104|B105,E110|E111|E112,G110|G111|G112,53723.0,53723,53723.0,3 bank payments ↔ 3 invoices (N:M); totals reconcile
+C079,MATCHED,N:M,B106|B107,E113|E114,G113|G114,35957.0,35957,35957.0,2 bank payments ↔ 2 invoices (N:M); totals reconcile
+C080,MATCHED,N:M,B108|B109|B110,E115|E116,G115|G116,86433.0,86433,86433.0,3 bank payments ↔ 2 invoices (N:M); totals reconcile
+C081,MATCHED,N:M,B111|B112,E117|E118|E119,G117|G118|G119,40484.0,40484,40484.0,2 bank payments ↔ 3 invoices (N:M); totals reconcile
+C082,MATCHED,N:M,B113|B114|B115,E120|E121,G120|G121,69086.0,69086,69086.0,3 bank payments ↔ 2 invoices (N:M); totals reconcile
+C083,MATCHED,N:M,B116|B117,E122|E123,G122|G123,69052.0,69052,69052.0,2 bank payments ↔ 2 invoices (N:M); totals reconcile
+C084,MATCHED,N:M,B118|B119|B120,E124|E125|E126,G124|G125|G126,46476.0,46476,46476.0,3 bank payments ↔ 3 invoices (N:M); totals reconcile
+C085,MATCHED,N:M,B121|B122,E127|E128,G127|G128,37507.0,37507,37507.0,2 bank payments ↔ 2 invoices (N:M); totals reconcile
+C086,MATCHED,FEES,B123,E129,G129,31719.33,32486,31719.33,Gross invoice 32486; TDR 649.72; GST on fee 116.95; bank net 31719.33
+C087,MATCHED,FEES,B124,E130,G130,55660.66,57006,55660.66,Gross invoice 57006; TDR 1140.12; GST on fee 205.22; bank net 55660.66
+C088,MATCHED,FEES,B125,E131,G131,36412.89,37293,36412.89,Gross invoice 37293; TDR 745.86; GST on fee 134.25; bank net 36412.89
+C089,MATCHED,FEES,B126,E132,G132,21783.48,22310,21783.48,Gross invoice 22310; TDR 446.2; GST on fee 80.32; bank net 21783.48
+C090,MATCHED,FEES,B127,E133,G133,33426.08,34234,33426.08,Gross invoice 34234; TDR 684.68; GST on fee 123.24; bank net 33426.08
+C091,MATCHED,REFUND,B128,E134,G134|G135,44901.0,48492,44901.0,Invoice 48492; partial refund 3591; expected net 44901
+C092,MATCHED,REFUND,B129,E135,G136|G137,48682.0,49735,48682.0,Invoice 49735; partial refund 1053; expected net 48682
+C093,MATCHED,REFUND,B130,E136,G138|G139,57693.0,67323,57693.0,Invoice 67323; partial refund 9630; expected net 57693
+C094,MATCHED,REFUND,B131,E137,G140|G141,45952.0,52806,45952.0,Invoice 52806; partial refund 6854; expected net 45952
+C095,MATCHED,REFUND,B132,E138,G142|G143,48785.0,53271,48785.0,Invoice 53271; partial refund 4486; expected net 48785
+C096,UNMATCHED,UNMATCHED,B133,,,25489.0,0,0.0,Bank-only unmatched transaction
+C097,UNMATCHED,UNMATCHED,,E139,,0.0,14779,0.0,ERP-only open invoice
+C098,UNMATCHED,UNMATCHED,,,G144,0.0,0,25937.0,Gateway-only settlement
+C099,UNMATCHED,UNMATCHED,B134,E140,G145,19700.0,20000,20000.0,All sources present but amount mismatch of 300; no fee explanation
+C100,UNMATCHED,UNMATCHED,B135,E141,G146,25000.0,25000,25000.0,Amount matches but customer/reference conflict; intentionally unmatched
